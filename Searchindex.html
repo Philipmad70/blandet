@@ -78,22 +78,27 @@
     color:var(--muted);font-size:12.5px;margin:12px 4px 18px;line-height:1.5;
   }
 
-  /* Grid of services */
-  .grid{
+  /* Category columns: every category is its own side-by-side column */
+  #groups{
     display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:12px;
+    grid-template-columns:repeat(4, minmax(0, 1fr));
+    gap:10px;
+    align-items:start;
   }
-  @media(min-width:460px){ .grid{grid-template-columns:repeat(3,1fr)} }
+  .group{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    min-width:0;
+  }
 
   .tile{
-    display:flex;flex-direction:column;gap:10px;
+    display:flex;flex-direction:column;gap:8px;
     align-items:flex-start;text-align:left;
     background:var(--tile);
     border:1px solid var(--tile-edge);
-    border-radius:16px;
-    padding:14px 13px 13px;
-    min-height:96px;
+    border-radius:14px;
+    padding:12px 10px 11px;
     color:var(--ink);
     cursor:pointer;
     transition:transform .08s ease, background .12s ease, border-color .12s ease;
@@ -102,16 +107,17 @@
   .tile:active{transform:scale(.97)}
   .tile:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
 
-  /* Monogram badge — carries identity by letter + shape, not colour alone */
+  /* Logo chip — real service logo on a light plate so any logo stays visible */
   .badge{
     width:36px;height:36px;border-radius:10px;
     display:grid;place-items:center;
-    font-weight:700;font-size:15px;line-height:1;
-    color:#fff;
-    border:1px solid rgba(255,255,255,.14);
+    background:#fff;
+    border:1px solid rgba(0,0,0,.10);
+    overflow:hidden;
   }
-  .name{font-weight:600;font-size:15px;letter-spacing:.01em}
-  .sub{font-size:11.5px;color:var(--muted);margin-top:-4px}
+  .badge img{width:22px;height:22px;display:block;object-fit:contain}
+  .name{font-weight:600;font-size:14px;letter-spacing:.01em;line-height:1.2}
+  .sub{font-size:11px;color:var(--muted);margin-top:-2px}
 
   .foot{
     margin-top:22px;color:var(--muted);font-size:11.5px;
@@ -139,51 +145,90 @@
     <p class="hint">Vælg en tjeneste — den åbner søgningen med teksten ovenfor.
     Retter du teksten, søger knapperne på det nye.</p>
 
-    <div class="grid" id="grid"></div>
+    <div id="groups"></div>
 
     <p class="foot">Tjenester med app åbner i appen, hvis “Åbn understøttede links” er slået til.</p>
   </main>
 
 <script>
-  // Each service: monogram, accent colour (accent only — the name + letter carry identity),
-  // and a URL template where %s is replaced by the (URL-encoded) search text.
-  const SERVICES = [
-    { name:"Google",        sub:"web",        mono:"G",   color:"#4285F4", url:"https://www.google.com/search?q=%s" },
-    { name:"Google Billeder",sub:"billeder",  mono:"▦",   color:"#0F9D58", url:"https://www.google.com/search?tbm=isch&q=%s" },
-    { name:"YouTube",       sub:"video",       mono:"►",   color:"#FF0000", url:"https://www.youtube.com/results?search_query=%s" },
-    { name:"IMDb",          sub:"film & tv",   mono:"★",   color:"#C9A227", url:"https://www.imdb.com/find/?q=%s" },
-    { name:"DR TV",         sub:"drtv",        mono:"DR",  color:"#6C4BD8", url:"https://www.dr.dk/drtv/soeg?q=%s" },
-    { name:"Reddit",        sub:"tråde",       mono:"r/",  color:"#FF4500", url:"https://www.reddit.com/search/?q=%s" },
-    { name:"Netflix",       sub:"stream",      mono:"N",   color:"#E50914", url:"https://www.netflix.com/search?q=%s" },
-    { name:"HBO Max",       sub:"stream",      mono:"HBO", color:"#7C5CFF", url:"https://www.hbomax.com/search?q=%s" },
-    { name:"Disney+",       sub:"stream",      mono:"D+",  color:"#1F80E0", url:"https://www.disneyplus.com/search?q=%s" },
-    { name:"Google Maps",   sub:"kort",        mono:"M",   color:"#2E9E5B", url:"https://www.google.com/maps/search/?api=1&query=%s" },
-    { name:"Spotify",       sub:"musik",       mono:"S",   color:"#1DB954", url:"https://open.spotify.com/search/%s" },
-    { name:"Wikipedia",     sub:"leksikon",    mono:"W",   color:"#6E6E73", url:"https://da.wikipedia.org/w/index.php?search=%s" },
-    { name:"Instagram",     sub:"foto & reels",mono:"IG",  color:"#E1306C", url:"https://www.instagram.com/explore/search/keyword/?q=%s" },
-    { name:"Facebook",      sub:"socialt",     mono:"f",   color:"#1877F2", url:"https://www.facebook.com/search/top/?q=%s" },
+  // Services grouped by type (no titles — the clusters carry the grouping).
+  // domain = where the real logo (favicon) is fetched from.
+  // mono   = short fallback shown only if a logo fails to load.
+  // %s in url is replaced by the URL-encoded search text.
+  const GROUPS = [
+    [ // søgning & opslag
+      { name:"Google",         sub:"web",         domain:"google.com",        mono:"G",   url:"https://www.google.com/search?q=%s" },
+      { name:"Google Billeder",sub:"billeder",    domain:"images.google.com", mono:"IMG", url:"https://www.google.com/search?tbm=isch&q=%s" },
+      { name:"Wikipedia",      sub:"leksikon",    domain:"da.wikipedia.org",  mono:"W",   url:"https://da.wikipedia.org/w/index.php?search=%s" },
+      { name:"Google Maps",    sub:"kort",        domain:"maps.google.com",   mono:"M",   url:"https://www.google.com/maps/search/?api=1&query=%s" },
+    ],
+    [ // film, tv & medier
+      { name:"YouTube",        sub:"video",       domain:"youtube.com",       mono:"YT",  url:"https://www.youtube.com/results?search_query=%s" },
+      { name:"IMDb",           sub:"film & tv",   domain:"imdb.com",          mono:"IMDb",url:"https://www.imdb.com/find/?q=%s" },
+      { name:"DR TV",          sub:"drtv",        domain:"dr.dk",             mono:"DR",  url:"https://www.dr.dk/drtv/soeg?q=%s" },
+      { name:"Netflix",        sub:"stream",      domain:"netflix.com",       mono:"N",   url:"https://www.netflix.com/search?q=%s" },
+      { name:"HBO Max",        sub:"stream",      domain:"hbomax.com",        mono:"HBO", url:"https://www.hbomax.com/search?q=%s" },
+      { name:"Disney+",        sub:"stream",      domain:"disneyplus.com",    mono:"D+",  url:"https://www.disneyplus.com/search?q=%s" },
+      { name:"Spotify",        sub:"musik",       domain:"spotify.com",       mono:"S",   url:"https://open.spotify.com/search/%s" },
+    ],
+    [ // socialt
+      { name:"Reddit",         sub:"tråde",       domain:"reddit.com",        mono:"r/",  url:"https://www.reddit.com/search/?q=%s" },
+      { name:"Instagram",      sub:"foto & reels",domain:"instagram.com",     mono:"IG",  url:"https://www.instagram.com/explore/search/keyword/?q=%s" },
+      { name:"Facebook",       sub:"socialt",     domain:"facebook.com",      mono:"f",   url:"https://www.facebook.com/search/top/?q=%s" },
+    ],
+    [ // AI
+      { name:"ChatGPT",        sub:"AI-prompt",   domain:"chatgpt.com",       mono:"GPT", url:"https://chatgpt.com/?q=%s" },
+      { name:"Claude",         sub:"AI-prompt",   domain:"claude.ai",         mono:"C",   url:"https://claude.ai/new?q=%s" },
+    ],
   ];
 
   const input = document.getElementById('q');
-  const grid  = document.getElementById('grid');
+  const groupsEl = document.getElementById('groups');
   const clearBtn = document.getElementById('clear');
 
   // Prefill from ?q= (this is where the text-selection app drops the selected text).
   const initial = new URLSearchParams(location.search).get('q') || '';
   input.value = initial;
 
-  // Build tiles
-  for (const s of SERVICES){
-    const b = document.createElement('button');
-    b.className = 'tile';
-    b.type = 'button';
-    b.setAttribute('aria-label', 'Søg på ' + s.name);
-    b.innerHTML =
-      '<span class="badge" style="background:'+s.color+'">'+s.mono+'</span>' +
-      '<span class="name">'+s.name+'</span>' +
-      '<span class="sub">'+s.sub+'</span>';
-    b.addEventListener('click', () => go(s.url));
-    grid.appendChild(b);
+  // Build grouped tiles
+  for (const group of GROUPS){
+    const g = document.createElement('div');
+    g.className = 'group';
+
+    for (const s of group){
+      const b = document.createElement('button');
+      b.className = 'tile';
+      b.type = 'button';
+      b.setAttribute('aria-label', 'Søg på ' + s.name);
+
+      const badge = document.createElement('span');
+      badge.className = 'badge';
+      const img = document.createElement('img');
+      img.alt = '';
+      img.loading = 'lazy';
+      img.src = 'https://www.google.com/s2/favicons?domain=' + s.domain + '&sz=128';
+      // If the logo can't load, fall back to a short label instead of a blank chip.
+      img.addEventListener('error', () => {
+        badge.textContent = s.mono;
+        badge.style.font = '700 13px var(--sans)';
+        badge.style.color = '#1a1a1a';
+      });
+      badge.appendChild(img);
+
+      const name = document.createElement('span');
+      name.className = 'name';
+      name.textContent = s.name;
+
+      const sub = document.createElement('span');
+      sub.className = 'sub';
+      sub.textContent = s.sub;
+
+      b.append(badge, name, sub);
+      b.addEventListener('click', () => go(s.url));
+      g.appendChild(b);
+    }
+
+    groupsEl.appendChild(g);
   }
 
   function go(tpl){
@@ -197,7 +242,7 @@
 
   // Enter in the field = search the first service (Google).
   input.addEventListener('keydown', e => {
-    if (e.key === 'Enter') go(SERVICES[0].url);
+    if (e.key === 'Enter') go(GROUPS[0][0].url);
   });
 
   // Select all text on focus so a quick edit replaces the whole term.
