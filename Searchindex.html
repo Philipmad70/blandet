@@ -35,8 +35,8 @@
   .field input{width:100%;border:1px solid var(--line);background:#fff;border-radius:10px;padding:9px 10px;font-size:13px;color:var(--ink);font-family:inherit;outline:0}
   .field input:focus{border-color:var(--accent)}
   .copybtns{display:flex;flex-wrap:wrap;gap:7px;margin-top:3px}
-  .cbtn{font-family:inherit;font-size:12.5px;font-weight:500;border:0;border-radius:9px;padding:8px 11px;background:#e9e9ee;color:var(--ink);cursor:pointer}
-  .cbtn.primary{background:var(--accent);color:#fff}
+  .cbtn{font-family:inherit;font-size:12.5px;font-weight:500;border:0;border-radius:9px;padding:8px 11px;background:#e9e9ee;color:var(--ink);cursor:pointer;transition:background .18s ease,color .18s ease}
+  .cbtn.flash{background:var(--accent);color:#fff}
   .cbtn:active{transform:scale(.97)}
   #copied{font-size:12px;color:#1a7f37;margin:9px 2px 0;min-height:15px}
 
@@ -75,12 +75,9 @@
         <input id="s-url" type="text" autocomplete="off" spellcheck="false">
       </div>
       <div class="copybtns">
-        <button class="cbtn primary" data-copy="link" type="button">Link (klikbart)</button>
+        <button class="cbtn" data-copy="both" type="button">Titel + URL</button>
         <button class="cbtn" data-copy="md" type="button">Markdown</button>
         <button class="cbtn" data-copy="html" type="button">HTML</button>
-        <button class="cbtn" data-copy="url" type="button">URL</button>
-        <button class="cbtn" data-copy="title" type="button">Titel</button>
-        <button class="cbtn" data-copy="both" type="button">Titel + URL</button>
       </div>
       <p id="copied" role="status" aria-live="polite"></p>
     </section>
@@ -231,32 +228,16 @@
       }catch(_){ return false; }
     }
   }
-  // "Link (klikbart)": lægger en rig HTML-udgave (<a>) på udklipsholderen, så
-  // UpNote m.fl. viser et klikbart link med titlen — plus en Markdown-reserve
-  // til felter, der kun kan ren tekst. (Det er sådan Tab Copy gør det.)
-  async function copyRichLink(){
-    const { t, u } = currentPieces();
-    if (!u) return false;
-    const html  = '<a href="' + esc(u) + '">' + esc(t || u) + '</a>';
-    const plain = t ? ('[' + t + '](' + u + ')') : u;
-    try{
-      const item = new ClipboardItem({
-        'text/html':  new Blob([html],  { type:'text/html' }),
-        'text/plain': new Blob([plain], { type:'text/plain' }),
-      });
-      await navigator.clipboard.write([item]);
-      return true;
-    }catch(e){ return copyText(plain); }
-  }
-
   let copiedTimer;
   document.querySelectorAll('.cbtn').forEach(btn => {
     btn.addEventListener('click', async () => {
-      const ok = btn.dataset.copy === 'link'
-        ? await copyRichLink()
-        : await copyText(buildCopy(btn.dataset.copy));
+      const ok = await copyText(buildCopy(btn.dataset.copy));
       copied.textContent = ok ? 'Kopieret ✓' : 'Kunne ikke kopiere — markér og kopiér manuelt';
       copied.style.color = ok ? '#1a7f37' : '#b00020';
+      if (ok){
+        btn.classList.add('flash');
+        setTimeout(() => btn.classList.remove('flash'), 1800);
+      }
       clearTimeout(copiedTimer);
       copiedTimer = setTimeout(() => { copied.textContent = ''; }, 2200);
     });
