@@ -3,100 +3,67 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#e7e7f1">
+<meta name="theme-color" content="#ffffff">
 <title>Søg videre</title>
 <link rel="manifest" href="manifest.json">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --paper:#e7e7f1;
-    --ink:#141422;
-    --accent:#2f2be0;
-    --chip:#ffffff;
-    --ok:#0f7a3d;
-    --sh:4px 4px 0 var(--ink);
-    --mono:'Space Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
-    --disp:'Bricolage Grotesque',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    --bg:#ffffff; --chip:#f3f3f5; --chip-press:#e7e7ec;
+    --ink:#1c1c1e; --muted:#8a8a90; --field:#f1f1f3;
+    --accent:#007aff; --line:#ececef;
+    --sans:-apple-system,system-ui,"SF Pro Text",Segoe UI,Roboto,sans-serif;
   }
   *{box-sizing:border-box}
   html,body{margin:0}
   body{
-    background:var(--paper);
-    background-image:radial-gradient(var(--ink) 1px, transparent 1.4px);
-    background-size:22px 22px;background-position:-2px -2px;
-    color:var(--ink);font-family:var(--disp);min-height:100dvh;
+    background:var(--bg);color:var(--ink);font-family:var(--sans);
+    min-height:100dvh;
     padding:
-      calc(env(safe-area-inset-top) + 22px)
-      calc(env(safe-area-inset-right) + 16px)
-      calc(env(safe-area-inset-bottom) + 30px)
-      calc(env(safe-area-inset-left) + 16px);
+      calc(env(safe-area-inset-top) + 24px)
+      calc(env(safe-area-inset-right) + 18px)
+      calc(env(safe-area-inset-bottom) + 34px)
+      calc(env(safe-area-inset-left) + 18px);
     -webkit-tap-highlight-color:transparent;
   }
-  .wrap{max-width:660px;margin:0 auto}
+  .wrap{max-width:540px;margin:0 auto}
 
-  .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.02em;text-transform:uppercase;margin:0 2px 4px}
-  h1{font-family:var(--disp);font-weight:800;font-size:clamp(38px,12vw,60px);line-height:.9;letter-spacing:-.02em;text-transform:uppercase;margin:0 0 14px}
-  .rule{height:4px;background:var(--ink);margin:0 0 18px}
-
-  /* Shared-link panel (only shown when a link was shared to the page) */
-  #share{
-    background:var(--chip);border:2.5px solid var(--ink);box-shadow:var(--sh);
-    padding:14px 13px;margin-bottom:16px;
-  }
-  #share h2{font-family:var(--mono);font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.04em;margin:0 0 10px}
-  .field{margin-bottom:10px}
-  .field label{display:block;font-family:var(--mono);font-size:11px;margin:0 0 4px;color:var(--ink)}
-  .field input{
-    width:100%;background:var(--paper);border:2px solid var(--ink);color:var(--ink);
-    font-family:var(--mono);font-size:13px;padding:8px 9px;outline:0;
-  }
+  /* Shared-link panel (only when a link was shared to the page) */
+  #share{background:#f7f7f9;border-radius:16px;padding:14px 14px 13px;margin-bottom:20px}
+  #share h2{font-size:12px;font-weight:600;color:var(--muted);margin:0 0 10px}
+  .field{margin-bottom:9px}
+  .field label{display:block;font-size:11px;color:var(--muted);margin:0 0 4px}
+  .field input{width:100%;border:1px solid var(--line);background:#fff;border-radius:10px;padding:9px 10px;font-size:13px;color:var(--ink);font-family:inherit;outline:0}
   .field input:focus{border-color:var(--accent)}
-  .copybtns{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
-  .cbtn{
-    font-family:var(--disp);font-weight:700;font-size:13px;
-    background:var(--chip);color:var(--ink);border:2.5px solid var(--ink);
-    box-shadow:2px 2px 0 var(--ink);padding:9px 11px;cursor:pointer;
-  }
+  .copybtns{display:flex;flex-wrap:wrap;gap:7px;margin-top:3px}
+  .cbtn{font-family:inherit;font-size:12.5px;font-weight:500;border:0;border-radius:9px;padding:8px 11px;background:#e9e9ee;color:var(--ink);cursor:pointer}
   .cbtn.primary{background:var(--accent);color:#fff}
-  .cbtn:active{transform:translate(2px,2px);box-shadow:0 0 0 var(--ink)}
-  #copied{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--ok);margin:10px 2px 0;min-height:16px}
+  .cbtn:active{transform:scale(.97)}
+  #copied{font-size:12px;color:#1a7f37;margin:9px 2px 0;min-height:15px}
 
-  /* Query box */
-  .bar{display:flex;align-items:center;gap:10px;background:var(--chip);border:2.5px solid var(--ink);box-shadow:var(--sh);padding:12px;margin-bottom:12px}
-  .prompt{font-family:var(--mono);font-weight:700;color:var(--accent);font-size:20px;line-height:1;flex:0 0 auto;user-select:none}
-  #q{flex:1 1 auto;min-width:0;background:transparent;border:0;outline:0;color:var(--ink);font-family:var(--mono);font-size:17px;padding:2px 0}
-  #q::placeholder{color:#8a8aa0}
-  .clear{flex:0 0 auto;width:34px;height:34px;border:2.5px solid var(--ink);background:var(--chip);color:var(--ink);font-size:15px;line-height:1;cursor:pointer;display:grid;place-items:center;font-family:var(--mono)}
-  .clear:active{transform:translate(2px,2px)}
+  /* Search bar */
+  .bar{display:flex;align-items:center;gap:9px;background:var(--field);border-radius:14px;padding:12px 14px;margin-bottom:26px}
+  .bar svg{flex:0 0 auto}
+  #q{flex:1 1 auto;min-width:0;border:0;background:transparent;outline:0;font-size:16px;color:var(--ink);font-family:inherit}
+  #q::placeholder{color:#a2a2a8}
+  .clear{flex:0 0 auto;border:0;background:transparent;color:var(--muted);font-size:15px;cursor:pointer;padding:2px 4px;line-height:1}
 
-  .hint{font-family:var(--mono);font-size:12px;line-height:1.5;margin:0 2px 20px}
+  /* Grouped icon grids, stacked with breathing room between groups */
+  .group + .group{margin-top:30px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(78px,1fr));gap:22px 12px}
+  .tile{display:flex;flex-direction:column;align-items:center;gap:8px;background:transparent;border:0;cursor:pointer;padding:0;font-family:inherit}
+  .chip{width:66px;height:66px;border-radius:19px;background:var(--chip);display:grid;place-items:center;transition:background .12s ease,transform .08s ease}
+  .chip img{width:32px;height:32px;object-fit:contain;display:block}
+  .tile:hover .chip{background:#eeeef2}
+  .tile:active .chip{background:var(--chip-press);transform:scale(.93)}
+  .tile:focus-visible{outline:none}
+  .tile:focus-visible .chip{outline:2px solid var(--accent);outline-offset:2px}
+  .name{font-size:12px;color:var(--muted);text-align:center;line-height:1.15;max-width:84px}
 
-  /* Four category columns */
-  #groups{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
-  .group{background:var(--chip);border:2.5px solid var(--ink);box-shadow:var(--sh);display:flex;flex-direction:column;overflow:hidden}
-  .tile{display:flex;flex-direction:column;gap:8px;align-items:flex-start;text-align:left;width:100%;background:var(--chip);border:0;border-bottom:2.5px solid var(--ink);padding:11px 10px;color:var(--ink);cursor:pointer;font-family:var(--disp)}
-  .group .tile:last-child{border-bottom:0}
-  .tile:hover{background:var(--accent);color:#fff}
-  .tile:active{transform:translate(1px,1px)}
-  .tile:focus-visible{outline:3px solid var(--accent);outline-offset:-3px}
-  .badge{width:30px;height:30px;display:grid;place-items:center;background:#fff;border:2px solid var(--ink);overflow:hidden}
-  .badge img{width:19px;height:19px;display:block;object-fit:contain}
-  .name{font-weight:700;font-size:13.5px;line-height:1.12;letter-spacing:-.01em}
-
-  .foot{font-family:var(--mono);font-size:11px;line-height:1.5;text-align:center;margin-top:22px}
-
-  @media(prefers-reduced-motion:reduce){.tile:active,.clear:active,.cbtn:active{transform:none}}
+  @media(prefers-reduced-motion:reduce){.chip,.cbtn{transition:none}.tile:active .chip,.cbtn:active{transform:none}}
 </style>
 </head>
 <body>
   <main class="wrap">
-    <p class="kicker">markeret tekst &rarr; tjeneste</p>
-    <h1>Søg videre</h1>
-    <div class="rule"></div>
-
-    <!-- Shown only when a link is shared to the page -->
     <section id="share" hidden>
       <h2>Delt link</h2>
       <div class="field">
@@ -108,41 +75,38 @@
         <input id="s-url" type="text" autocomplete="off" spellcheck="false">
       </div>
       <div class="copybtns">
-        <button class="cbtn primary" data-copy="md" type="button">Kopiér som Markdown</button>
-        <button class="cbtn" data-copy="url" type="button">Kopiér URL</button>
-        <button class="cbtn" data-copy="title" type="button">Kopiér titel</button>
+        <button class="cbtn primary" data-copy="link" type="button">Kopiér som link</button>
+        <button class="cbtn" data-copy="md" type="button">Markdown</button>
+        <button class="cbtn" data-copy="url" type="button">URL</button>
+        <button class="cbtn" data-copy="title" type="button">Titel</button>
         <button class="cbtn" data-copy="both" type="button">Titel + URL</button>
       </div>
       <p id="copied" role="status" aria-live="polite"></p>
     </section>
 
     <div class="bar">
-      <span class="prompt" aria-hidden="true">&gt;</span>
-      <input id="q" type="text" placeholder="skriv eller markér tekst…"
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#8a8a90" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
+      <input id="q" type="text" placeholder="søg…"
              autocomplete="off" autocapitalize="none" spellcheck="false"
              enterkeyhint="search" aria-label="Søgetekst">
-      <button class="clear" id="clear" type="button" aria-label="Ryd tekst">✕</button>
+      <button class="clear" id="clear" type="button" aria-label="Ryd">✕</button>
     </div>
 
-    <p class="hint">Vælg en tjeneste — den åbner søgningen med teksten ovenfor.
-    Retter du teksten, søger knapperne på det nye.</p>
-
     <div id="groups"></div>
-
-    <p class="foot">Tjenester med app åbner i appen, hvis “Åbn understøttede links” er slået til.</p>
   </main>
 
 <script>
+  // Grupper (øverst → nederst): søgning/opslag · streaming · socialt · AI
   const GROUPS = [
     [
       { name:"Google",          domain:"google.com",        mono:"G",    url:"https://www.google.com/search?q=%s" },
       { name:"Google Billeder", domain:"images.google.com", mono:"IMG",  url:"https://www.google.com/search?tbm=isch&q=%s" },
-      { name:"Wikipedia",       domain:"da.wikipedia.org",  mono:"W",    url:"https://da.wikipedia.org/w/index.php?search=%s" },
       { name:"Google Maps",     domain:"maps.google.com",   mono:"M",    url:"https://www.google.com/maps/search/?api=1&query=%s" },
+      { name:"Wikipedia",       domain:"da.wikipedia.org",  mono:"W",    url:"https://da.wikipedia.org/w/index.php?search=%s" },
+      { name:"IMDb",            domain:"imdb.com",          mono:"IMDb", url:"https://www.imdb.com/find/?q=%s" },
     ],
     [
       { name:"YouTube",         domain:"youtube.com",       mono:"YT",   url:"https://www.youtube.com/results?search_query=%s" },
-      { name:"IMDb",            domain:"imdb.com",          mono:"IMDb", url:"https://www.imdb.com/find/?q=%s" },
       { name:"DR TV",           domain:"dr.dk",             mono:"DR",   url:"https://www.dr.dk/drtv/soeg?q=%s" },
       { name:"Netflix",         domain:"netflix.com",       mono:"N",    url:"https://www.netflix.com/search?q=%s" },
       { name:"HBO Max",         domain:"hbomax.com",        mono:"HBO",  url:"https://www.hbomax.com/search?q=%s" },
@@ -166,37 +130,29 @@
   const params = new URLSearchParams(location.search);
 
   // Din egen Cloudflare Worker, der returnerer {"title":"..."} for en URL.
-  // Indsæt din Worker-adresse her efter du har deployet den, fx:
-  //   const TITLE_WORKER = "https://titel.dit-navn.workers.dev";
-  // Er den tom, bruges kun den offentlige fallback (noembed).
-  const TITLE_WORKER = "https://henttitel.philipmad70.workers.dev/";
+  // Indsæt din Worker-adresse her, fx: "https://titel.dit-navn.workers.dev"
+  const TITLE_WORKER = "";
 
   // ---- Shared link handling (Web Share Target) --------------------------
-  // Different apps put things in different fields, so parse defensively.
   const shareEl = document.getElementById('share');
   const sTitle  = document.getElementById('s-title');
   const sUrl    = document.getElementById('s-url');
   const copied  = document.getElementById('copied');
 
-  // Don't overwrite a title the user has started editing by hand.
   let titleLocked = false;
   sTitle.addEventListener('input', () => { titleLocked = true; });
 
   const rawTitle = params.get('title') || '';
   const rawText  = params.get('text')  || '';
   let   rawUrl   = params.get('url')   || '';
-
   const hasShare = !!(rawTitle || rawText || rawUrl);
 
-  // Many apps share only the link. Reddit/news URLs usually carry the title as
-  // the last path segment (…/comments/id/some_post_title/) — turn that into text.
   function prettyFromUrl(u){
     try{
       const url = new URL(u);
       const segs = url.pathname.split('/').filter(Boolean);
       if (!segs.length) return '';
       let slug = decodeURIComponent(segs[segs.length - 1]).replace(/\.(html?|php|aspx)$/i,'');
-      // Only use it if it reads like a word-slug, not an id or code.
       if (!/[a-zæøå].*[-_].*[a-zæøå]/i.test(slug)) return '';
       slug = slug.replace(/[-_]+/g,' ').replace(/\s+/g,' ').trim();
       if (slug.length < 3) return '';
@@ -205,28 +161,24 @@
   }
 
   if (hasShare){
-    // If no explicit url field, pull the first link out of the shared text.
     if (!rawUrl){
       const m = rawText.match(/https?:\/\/[^\s]+/);
       if (m) rawUrl = m[0];
     }
-    // Decide the title in order of preference:
+    const isUrlLike = (s) => /^\s*https?:\/\/\S+\s*$/i.test(s || '');
     let title = rawTitle.trim();
-    if (!title || title === rawUrl){
-      const leftover = rawText.replace(rawUrl, '').trim();  // text minus the URL
-      if (leftover && leftover !== rawUrl) title = leftover;
+    if (isUrlLike(title)) title = '';
+    if (!title){
+      const leftover = rawText.replace(/https?:\/\/[^\s]+/g, '').trim();
+      if (leftover) title = leftover;
     }
-    if (!title || title === rawUrl){
-      title = prettyFromUrl(rawUrl);                        // derive from the URL itself
-    }
-    if (title === rawUrl) title = '';                       // never show the URL as the title
+    if (!title) title = prettyFromUrl(rawUrl);
 
     sTitle.value = title;
     sUrl.value = rawUrl;
     shareEl.hidden = false;
-    if (title) input.value = title;                         // seed search box only with a real title
+    if (title) input.value = title;
 
-    // Try to fetch the real page title server-side (browser can't cross origins).
     if (rawUrl){
       if (!sTitle.value) sTitle.placeholder = 'henter titel…';
       fetchTitleRemote(rawUrl).then(t => {
@@ -240,29 +192,24 @@
     }
   }
 
-  // Fetch a page title: 1) your own Worker, 2) public fallback (noembed).
   async function fetchTitleRemote(url){
     const withTimeout = (p, ms) =>
       Promise.race([p, new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), ms))]);
-
     if (TITLE_WORKER){
       try{
         const r = await withTimeout(fetch(TITLE_WORKER + '?url=' + encodeURIComponent(url)), 6500);
         if (r.ok){ const j = await r.json(); if (j && j.title) return String(j.title).trim(); }
-      }catch(e){ /* fall through to fallback */ }
+      }catch(e){}
     }
     try{
       const r = await withTimeout(fetch('https://noembed.com/embed?url=' + encodeURIComponent(url)), 6500);
       if (r.ok){ const j = await r.json(); if (j && j.title) return String(j.title).trim(); }
-    }catch(e){ /* give up quietly */ }
+    }catch(e){}
     return '';
   }
 
-  function currentPieces(){
-    const t = sTitle.value.trim();
-    const u = sUrl.value.trim();
-    return { t, u };
-  }
+  function currentPieces(){ return { t: sTitle.value.trim(), u: sUrl.value.trim() }; }
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
   function buildCopy(kind){
     const { t, u } = currentPieces();
     if (kind === 'md')    return t ? '[' + t + '](' + u + ')' : '<' + u + '>';
@@ -272,57 +219,68 @@
     return '';
   }
   async function copyText(text){
+    try{ await navigator.clipboard.writeText(text); return true; }
+    catch(e){
+      try{
+        const ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';
+        document.body.appendChild(ta);ta.select();const ok=document.execCommand('copy');document.body.removeChild(ta);return ok;
+      }catch(_){ return false; }
+    }
+  }
+  // Rich copy: puts a clickable HTML link on the clipboard (like Tab Copy),
+  // with a plain-text version as fallback for plain fields.
+  async function copyRichLink(){
+    const { t, u } = currentPieces();
+    if (!u) return false;
+    const html  = '<a href="' + esc(u) + '">' + esc(t || u) + '</a>';
+    const plain = t ? (t + ' — ' + u) : u;
     try{
-      await navigator.clipboard.writeText(text);
+      const item = new ClipboardItem({
+        'text/html':  new Blob([html],  { type:'text/html' }),
+        'text/plain': new Blob([plain], { type:'text/plain' }),
+      });
+      await navigator.clipboard.write([item]);
       return true;
     }catch(e){
-      // Fallback for older browsers / blocked clipboard API
-      try{
-        const ta = document.createElement('textarea');
-        ta.value = text; ta.style.position='fixed'; ta.style.opacity='0';
-        document.body.appendChild(ta); ta.select();
-        const ok = document.execCommand('copy');
-        document.body.removeChild(ta);
-        return ok;
-      }catch(_){ return false; }
+      return copyText(plain); // ældre browsere: fald tilbage til ren tekst
     }
   }
   let copiedTimer;
   document.querySelectorAll('.cbtn').forEach(btn => {
     btn.addEventListener('click', async () => {
-      const ok = await copyText(buildCopy(btn.dataset.copy));
+      const ok = btn.dataset.copy === 'link'
+        ? await copyRichLink()
+        : await copyText(buildCopy(btn.dataset.copy));
       copied.textContent = ok ? 'Kopieret ✓' : 'Kunne ikke kopiere — markér og kopiér manuelt';
-      copied.style.color = ok ? 'var(--ok)' : 'var(--accent)';
+      copied.style.color = ok ? '#1a7f37' : '#b00020';
       clearTimeout(copiedTimer);
       copiedTimer = setTimeout(() => { copied.textContent = ''; }, 2200);
     });
   });
 
-  // ---- Search box prefill (from the text-selection app) -----------------
+  // ---- Search prefill ---------------------------------------------------
   const q = params.get('q');
-  if (q !== null) input.value = q;   // ?q= wins if present
+  if (q !== null) input.value = q;
 
-  // ---- Build the service columns ----------------------------------------
+  // ---- Build grouped icon grids -----------------------------------------
   for (const group of GROUPS){
-    const g = document.createElement('div');
-    g.className = 'group';
+    const g = document.createElement('div'); g.className='group';
+    const grid = document.createElement('div'); grid.className='grid';
     for (const s of group){
       const b = document.createElement('button');
-      b.className = 'tile'; b.type = 'button';
-      b.setAttribute('aria-label', 'Søg på ' + s.name);
-      const badge = document.createElement('span');
-      badge.className = 'badge';
-      const img = document.createElement('img');
-      img.alt=''; img.loading='lazy';
+      b.className='tile'; b.type='button';
+      b.setAttribute('aria-label','Søg på ' + s.name);
+      const chip = document.createElement('span'); chip.className='chip';
+      const img = document.createElement('img'); img.alt=''; img.loading='lazy';
       img.src = 'https://www.google.com/s2/favicons?domain=' + s.domain + '&sz=128';
-      img.addEventListener('error', () => { badge.textContent = s.mono; badge.style.font='700 12px var(--mono)'; });
-      badge.appendChild(img);
-      const name = document.createElement('span');
-      name.className='name'; name.textContent=s.name;
-      b.append(badge, name);
+      img.addEventListener('error', () => { chip.textContent = s.mono; chip.style.font='600 15px var(--sans)'; chip.style.color='#6b6b72'; });
+      chip.appendChild(img);
+      const name = document.createElement('span'); name.className='name'; name.textContent=s.name;
+      b.append(chip, name);
       b.addEventListener('click', () => go(s.url));
-      g.appendChild(b);
+      grid.appendChild(b);
     }
+    g.appendChild(grid);
     groupsEl.appendChild(g);
   }
 
@@ -334,7 +292,6 @@
   input.addEventListener('keydown', e => { if (e.key === 'Enter') go(GROUPS[0][0].url); });
   input.addEventListener('focus', () => input.select());
 
-  // ---- Register the service worker so the page is installable -----------
   if ('serviceWorker' in navigator){
     window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(()=>{}));
   }
