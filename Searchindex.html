@@ -165,12 +165,22 @@
   const clearBtn = document.getElementById('clear');
   const params = new URLSearchParams(location.search);
 
+  // Din egen Cloudflare Worker, der returnerer {"title":"..."} for en URL.
+  // Indsæt din Worker-adresse her efter du har deployet den, fx:
+  //   const TITLE_WORKER = "https://titel.dit-navn.workers.dev";
+  // Er den tom, bruges kun den offentlige fallback (noembed).
+  const TITLE_WORKER = "https://henttitel.philipmad70.workers.dev/";
+
   // ---- Shared link handling (Web Share Target) --------------------------
   // Different apps put things in different fields, so parse defensively.
   const shareEl = document.getElementById('share');
   const sTitle  = document.getElementById('s-title');
   const sUrl    = document.getElementById('s-url');
   const copied  = document.getElementById('copied');
+
+  // Don't overwrite a title the user has started editing by hand.
+  let titleLocked = false;
+  sTitle.addEventListener('input', () => { titleLocked = true; });
 
   const rawTitle = params.get('title') || '';
   const rawText  = params.get('text')  || '';
@@ -215,6 +225,37 @@
     sUrl.value = rawUrl;
     shareEl.hidden = false;
     if (title) input.value = title;                         // seed search box only with a real title
+
+    // Try to fetch the real page title server-side (browser can't cross origins).
+    if (rawUrl){
+      if (!sTitle.value) sTitle.placeholder = 'henter titel…';
+      fetchTitleRemote(rawUrl).then(t => {
+        sTitle.placeholder = 'skriv en titel';
+        if (t && !titleLocked){
+          const prev = sTitle.value;
+          sTitle.value = t;
+          if (!input.value || input.value === prev) input.value = t;
+        }
+      });
+    }
+  }
+
+  // Fetch a page title: 1) your own Worker, 2) public fallback (noembed).
+  async function fetchTitleRemote(url){
+    const withTimeout = (p, ms) =>
+      Promise.race([p, new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), ms))]);
+
+    if (TITLE_WORKER){
+      try{
+        const r = await withTimeout(fetch(TITLE_WORKER + '?url=' + encodeURIComponent(url)), 6500);
+        if (r.ok){ const j = await r.json(); if (j && j.title) return String(j.title).trim(); }
+      }catch(e){ /* fall through to fallback */ }
+    }
+    try{
+      const r = await withTimeout(fetch('https://noembed.com/embed?url=' + encodeURIComponent(url)), 6500);
+      if (r.ok){ const j = await r.json(); if (j && j.title) return String(j.title).trim(); }
+    }catch(e){ /* give up quietly */ }
+    return '';
   }
 
   function currentPieces(){
