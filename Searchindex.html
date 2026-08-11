@@ -75,7 +75,8 @@
         <input id="s-url" type="text" autocomplete="off" spellcheck="false">
       </div>
       <div class="copybtns">
-        <button class="cbtn primary" data-copy="md" type="button">Markdown</button>
+        <button class="cbtn primary" data-copy="link" type="button">Link (klikbart)</button>
+        <button class="cbtn" data-copy="md" type="button">Markdown</button>
         <button class="cbtn" data-copy="html" type="button">HTML</button>
         <button class="cbtn" data-copy="url" type="button">URL</button>
         <button class="cbtn" data-copy="title" type="button">Titel</button>
@@ -230,10 +231,30 @@
       }catch(_){ return false; }
     }
   }
+  // "Link (klikbart)": lægger en rig HTML-udgave (<a>) på udklipsholderen, så
+  // UpNote m.fl. viser et klikbart link med titlen — plus en Markdown-reserve
+  // til felter, der kun kan ren tekst. (Det er sådan Tab Copy gør det.)
+  async function copyRichLink(){
+    const { t, u } = currentPieces();
+    if (!u) return false;
+    const html  = '<a href="' + esc(u) + '">' + esc(t || u) + '</a>';
+    const plain = t ? ('[' + t + '](' + u + ')') : u;
+    try{
+      const item = new ClipboardItem({
+        'text/html':  new Blob([html],  { type:'text/html' }),
+        'text/plain': new Blob([plain], { type:'text/plain' }),
+      });
+      await navigator.clipboard.write([item]);
+      return true;
+    }catch(e){ return copyText(plain); }
+  }
+
   let copiedTimer;
   document.querySelectorAll('.cbtn').forEach(btn => {
     btn.addEventListener('click', async () => {
-      const ok = await copyText(buildCopy(btn.dataset.copy));
+      const ok = btn.dataset.copy === 'link'
+        ? await copyRichLink()
+        : await copyText(buildCopy(btn.dataset.copy));
       copied.textContent = ok ? 'Kopieret ✓' : 'Kunne ikke kopiere — markér og kopiér manuelt';
       copied.style.color = ok ? '#1a7f37' : '#b00020';
       clearTimeout(copiedTimer);
