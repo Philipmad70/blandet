@@ -75,8 +75,8 @@
         <input id="s-url" type="text" autocomplete="off" spellcheck="false">
       </div>
       <div class="copybtns">
-        <button class="cbtn primary" data-copy="link" type="button">Kopiér som link</button>
-        <button class="cbtn" data-copy="md" type="button">Markdown</button>
+        <button class="cbtn primary" data-copy="md" type="button">Markdown</button>
+        <button class="cbtn" data-copy="html" type="button">HTML</button>
         <button class="cbtn" data-copy="url" type="button">URL</button>
         <button class="cbtn" data-copy="title" type="button">Titel</button>
         <button class="cbtn" data-copy="both" type="button">Titel + URL</button>
@@ -95,6 +95,7 @@
     <div id="groups"></div>
   </main>
 
+<script src="config.js"></script>
 <script>
   // Grupper (øverst → nederst): søgning/opslag · streaming · socialt · AI
   const GROUPS = [
@@ -129,9 +130,9 @@
   const clearBtn = document.getElementById('clear');
   const params = new URLSearchParams(location.search);
 
-  // Din egen Cloudflare Worker, der returnerer {"title":"..."} for en URL.
-  // Indsæt din Worker-adresse her, fx: "https://titel.dit-navn.workers.dev"
-  const TITLE_WORKER = "https://henttitel.philipmad70.workers.dev/";
+  // Worker-adressen sættes ÉN gang i config.js, så den IKKE nulstilles, når du
+  // uploader denne fil igen. Mangler config.js/er den tom, bruges kun fallback.
+  const TITLE_WORKER = (window.TITLE_WORKER || "").trim();
 
   // ---- Shared link handling (Web Share Target) --------------------------
   const shareEl = document.getElementById('share');
@@ -212,7 +213,9 @@
   function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
   function buildCopy(kind){
     const { t, u } = currentPieces();
-    if (kind === 'md')    return t ? '[' + t + '](' + u + ')' : '<' + u + '>';
+    const label = t || u;
+    if (kind === 'md')    return t ? '[' + t + '](' + u + ')' : u;
+    if (kind === 'html')  return '<a href="' + esc(u) + '">' + esc(label) + '</a>';
     if (kind === 'url')   return u;
     if (kind === 'title') return t;
     if (kind === 'both')  return (t ? t + '\n' : '') + u;
@@ -227,30 +230,10 @@
       }catch(_){ return false; }
     }
   }
-  // Rich copy: puts a clickable HTML link on the clipboard (like Tab Copy),
-  // with a plain-text version as fallback for plain fields.
-  async function copyRichLink(){
-    const { t, u } = currentPieces();
-    if (!u) return false;
-    const html  = '<a href="' + esc(u) + '">' + esc(t || u) + '</a>';
-    const plain = t ? (t + ' — ' + u) : u;
-    try{
-      const item = new ClipboardItem({
-        'text/html':  new Blob([html],  { type:'text/html' }),
-        'text/plain': new Blob([plain], { type:'text/plain' }),
-      });
-      await navigator.clipboard.write([item]);
-      return true;
-    }catch(e){
-      return copyText(plain); // ældre browsere: fald tilbage til ren tekst
-    }
-  }
   let copiedTimer;
   document.querySelectorAll('.cbtn').forEach(btn => {
     btn.addEventListener('click', async () => {
-      const ok = btn.dataset.copy === 'link'
-        ? await copyRichLink()
-        : await copyText(buildCopy(btn.dataset.copy));
+      const ok = await copyText(buildCopy(btn.dataset.copy));
       copied.textContent = ok ? 'Kopieret ✓' : 'Kunne ikke kopiere — markér og kopiér manuelt';
       copied.style.color = ok ? '#1a7f37' : '#b00020';
       clearTimeout(copiedTimer);
