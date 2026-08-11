@@ -1,0 +1,23 @@
+{
+  "name": "Søg videre",
+  "short_name": "Søg videre",
+  "description": "Søg markeret tekst på tværs af tjenester, og gem delte links som Markdown.",
+  "start_url": "Searchindex.html",
+  "scope": "./",
+  "display": "standalone",
+  "theme_color": "#e7e7f1",
+  "background_color": "#e7e7f1",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ],
+  "share_target": {
+    "action": "Searchindex.html",
+    "method": "GET",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  }
+}

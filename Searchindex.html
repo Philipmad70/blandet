@@ -3,139 +3,121 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#12131a">
+<meta name="theme-color" content="#e7e7f1">
 <title>Søg videre</title>
+<link rel="manifest" href="manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#12131a;
-    --panel:#1b1d28;
-    --panel-edge:#2b2e3d;
-    --tile:#20222f;
-    --tile-edge:#31344a;
-    --tile-hover:#282b3c;
-    --ink:#f4f5fb;
-    --muted:#9aa0b8;
-    --focus:#8ab4ff;
-    --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
-    --sans:'Space Grotesk',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    --paper:#e7e7f1;
+    --ink:#141422;
+    --accent:#2f2be0;
+    --chip:#ffffff;
+    --ok:#0f7a3d;
+    --sh:4px 4px 0 var(--ink);
+    --mono:'Space Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+    --disp:'Bricolage Grotesque',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
   }
   *{box-sizing:border-box}
   html,body{margin:0}
   body{
-    background:
-      radial-gradient(120% 90% at 50% -10%, #1a1c28 0%, var(--bg) 60%);
-    color:var(--ink);
-    font-family:var(--sans);
-    min-height:100dvh;
+    background:var(--paper);
+    background-image:radial-gradient(var(--ink) 1px, transparent 1.4px);
+    background-size:22px 22px;background-position:-2px -2px;
+    color:var(--ink);font-family:var(--disp);min-height:100dvh;
     padding:
-      calc(env(safe-area-inset-top) + 18px)
+      calc(env(safe-area-inset-top) + 22px)
       calc(env(safe-area-inset-right) + 16px)
-      calc(env(safe-area-inset-bottom) + 28px)
+      calc(env(safe-area-inset-bottom) + 30px)
       calc(env(safe-area-inset-left) + 16px);
     -webkit-tap-highlight-color:transparent;
   }
-  .wrap{max-width:560px;margin:0 auto}
+  .wrap{max-width:660px;margin:0 auto}
 
-  /* Header / query echo — the reason the page exists */
-  .eyebrow{
-    font-size:12px;letter-spacing:.16em;text-transform:uppercase;
-    color:var(--muted);font-weight:600;margin:2px 2px 10px;
-  }
-  .query{
-    display:flex;align-items:center;gap:10px;
-    background:var(--panel);
-    border:1px solid var(--panel-edge);
-    border-radius:16px;
-    padding:14px 14px;
-    box-shadow:0 8px 30px rgba(0,0,0,.35);
-  }
-  .query .caret{
-    font-family:var(--mono);color:var(--focus);font-size:18px;
-    line-height:1;flex:0 0 auto;user-select:none;
-  }
-  #q{
-    flex:1 1 auto;min-width:0;
-    background:transparent;border:0;outline:0;
-    color:var(--ink);
-    font-family:var(--mono);font-size:18px;font-weight:500;
-    padding:2px 0;
-  }
-  #q::placeholder{color:#5b6180}
-  .clear{
-    flex:0 0 auto;
-    width:30px;height:30px;border-radius:9px;
-    border:1px solid var(--tile-edge);
-    background:var(--tile);color:var(--muted);
-    font-size:16px;line-height:1;cursor:pointer;
-    display:grid;place-items:center;
-  }
-  .clear:active{background:var(--tile-hover)}
+  .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.02em;text-transform:uppercase;margin:0 2px 4px}
+  h1{font-family:var(--disp);font-weight:800;font-size:clamp(38px,12vw,60px);line-height:.9;letter-spacing:-.02em;text-transform:uppercase;margin:0 0 14px}
+  .rule{height:4px;background:var(--ink);margin:0 0 18px}
 
-  .hint{
-    color:var(--muted);font-size:12.5px;margin:12px 4px 18px;line-height:1.5;
+  /* Shared-link panel (only shown when a link was shared to the page) */
+  #share{
+    background:var(--chip);border:2.5px solid var(--ink);box-shadow:var(--sh);
+    padding:14px 13px;margin-bottom:16px;
   }
+  #share h2{font-family:var(--mono);font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.04em;margin:0 0 10px}
+  .field{margin-bottom:10px}
+  .field label{display:block;font-family:var(--mono);font-size:11px;margin:0 0 4px;color:var(--ink)}
+  .field input{
+    width:100%;background:var(--paper);border:2px solid var(--ink);color:var(--ink);
+    font-family:var(--mono);font-size:13px;padding:8px 9px;outline:0;
+  }
+  .field input:focus{border-color:var(--accent)}
+  .copybtns{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+  .cbtn{
+    font-family:var(--disp);font-weight:700;font-size:13px;
+    background:var(--chip);color:var(--ink);border:2.5px solid var(--ink);
+    box-shadow:2px 2px 0 var(--ink);padding:9px 11px;cursor:pointer;
+  }
+  .cbtn.primary{background:var(--accent);color:#fff}
+  .cbtn:active{transform:translate(2px,2px);box-shadow:0 0 0 var(--ink)}
+  #copied{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--ok);margin:10px 2px 0;min-height:16px}
 
-  /* Category columns: every category is its own side-by-side column */
-  #groups{
-    display:grid;
-    grid-template-columns:repeat(4, minmax(0, 1fr));
-    gap:10px;
-    align-items:start;
-  }
-  .group{
-    display:flex;
-    flex-direction:column;
-    gap:10px;
-    min-width:0;
-  }
+  /* Query box */
+  .bar{display:flex;align-items:center;gap:10px;background:var(--chip);border:2.5px solid var(--ink);box-shadow:var(--sh);padding:12px;margin-bottom:12px}
+  .prompt{font-family:var(--mono);font-weight:700;color:var(--accent);font-size:20px;line-height:1;flex:0 0 auto;user-select:none}
+  #q{flex:1 1 auto;min-width:0;background:transparent;border:0;outline:0;color:var(--ink);font-family:var(--mono);font-size:17px;padding:2px 0}
+  #q::placeholder{color:#8a8aa0}
+  .clear{flex:0 0 auto;width:34px;height:34px;border:2.5px solid var(--ink);background:var(--chip);color:var(--ink);font-size:15px;line-height:1;cursor:pointer;display:grid;place-items:center;font-family:var(--mono)}
+  .clear:active{transform:translate(2px,2px)}
 
-  .tile{
-    display:flex;flex-direction:column;gap:8px;
-    align-items:flex-start;text-align:left;
-    background:var(--tile);
-    border:1px solid var(--tile-edge);
-    border-radius:14px;
-    padding:12px 10px 11px;
-    color:var(--ink);
-    cursor:pointer;
-    transition:transform .08s ease, background .12s ease, border-color .12s ease;
-  }
-  .tile:hover{background:var(--tile-hover)}
-  .tile:active{transform:scale(.97)}
-  .tile:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+  .hint{font-family:var(--mono);font-size:12px;line-height:1.5;margin:0 2px 20px}
 
-  /* Logo chip — real service logo on a light plate so any logo stays visible */
-  .badge{
-    width:36px;height:36px;border-radius:10px;
-    display:grid;place-items:center;
-    background:#fff;
-    border:1px solid rgba(0,0,0,.10);
-    overflow:hidden;
-  }
-  .badge img{width:22px;height:22px;display:block;object-fit:contain}
-  .name{font-weight:600;font-size:14px;letter-spacing:.01em;line-height:1.2}
-  .sub{font-size:11px;color:var(--muted);margin-top:-2px}
+  /* Four category columns */
+  #groups{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+  .group{background:var(--chip);border:2.5px solid var(--ink);box-shadow:var(--sh);display:flex;flex-direction:column;overflow:hidden}
+  .tile{display:flex;flex-direction:column;gap:8px;align-items:flex-start;text-align:left;width:100%;background:var(--chip);border:0;border-bottom:2.5px solid var(--ink);padding:11px 10px;color:var(--ink);cursor:pointer;font-family:var(--disp)}
+  .group .tile:last-child{border-bottom:0}
+  .tile:hover{background:var(--accent);color:#fff}
+  .tile:active{transform:translate(1px,1px)}
+  .tile:focus-visible{outline:3px solid var(--accent);outline-offset:-3px}
+  .badge{width:30px;height:30px;display:grid;place-items:center;background:#fff;border:2px solid var(--ink);overflow:hidden}
+  .badge img{width:19px;height:19px;display:block;object-fit:contain}
+  .name{font-weight:700;font-size:13.5px;line-height:1.12;letter-spacing:-.01em}
 
-  .foot{
-    margin-top:22px;color:var(--muted);font-size:11.5px;
-    line-height:1.5;text-align:center;
-  }
+  .foot{font-family:var(--mono);font-size:11px;line-height:1.5;text-align:center;margin-top:22px}
 
-  @media(prefers-reduced-motion:reduce){
-    .tile{transition:none}
-    .tile:active{transform:none}
-  }
+  @media(prefers-reduced-motion:reduce){.tile:active,.clear:active,.cbtn:active{transform:none}}
 </style>
 </head>
 <body>
   <main class="wrap">
-    <p class="eyebrow">Søg videre</p>
+    <p class="kicker">markeret tekst &rarr; tjeneste</p>
+    <h1>Søg videre</h1>
+    <div class="rule"></div>
 
-    <div class="query">
-      <span class="caret" aria-hidden="true">&gt;</span>
+    <!-- Shown only when a link is shared to the page -->
+    <section id="share" hidden>
+      <h2>Delt link</h2>
+      <div class="field">
+        <label for="s-title">Titel</label>
+        <input id="s-title" type="text" autocomplete="off" spellcheck="false">
+      </div>
+      <div class="field">
+        <label for="s-url">URL</label>
+        <input id="s-url" type="text" autocomplete="off" spellcheck="false">
+      </div>
+      <div class="copybtns">
+        <button class="cbtn primary" data-copy="md" type="button">Kopiér som Markdown</button>
+        <button class="cbtn" data-copy="url" type="button">Kopiér URL</button>
+        <button class="cbtn" data-copy="title" type="button">Kopiér titel</button>
+        <button class="cbtn" data-copy="both" type="button">Titel + URL</button>
+      </div>
+      <p id="copied" role="status" aria-live="polite"></p>
+    </section>
+
+    <div class="bar">
+      <span class="prompt" aria-hidden="true">&gt;</span>
       <input id="q" type="text" placeholder="skriv eller markér tekst…"
              autocomplete="off" autocapitalize="none" spellcheck="false"
              enterkeyhint="search" aria-label="Søgetekst">
@@ -151,102 +133,149 @@
   </main>
 
 <script>
-  // Services grouped by type (no titles — the clusters carry the grouping).
-  // domain = where the real logo (favicon) is fetched from.
-  // mono   = short fallback shown only if a logo fails to load.
-  // %s in url is replaced by the URL-encoded search text.
   const GROUPS = [
-    [ // søgning & opslag
-      { name:"Google",         sub:"web",         domain:"google.com",        mono:"G",   url:"https://www.google.com/search?q=%s" },
-      { name:"Google Billeder",sub:"billeder",    domain:"images.google.com", mono:"IMG", url:"https://www.google.com/search?tbm=isch&q=%s" },
-      { name:"Wikipedia",      sub:"leksikon",    domain:"da.wikipedia.org",  mono:"W",   url:"https://da.wikipedia.org/w/index.php?search=%s" },
-      { name:"Google Maps",    sub:"kort",        domain:"maps.google.com",   mono:"M",   url:"https://www.google.com/maps/search/?api=1&query=%s" },
+    [
+      { name:"Google",          domain:"google.com",        mono:"G",    url:"https://www.google.com/search?q=%s" },
+      { name:"Google Billeder", domain:"images.google.com", mono:"IMG",  url:"https://www.google.com/search?tbm=isch&q=%s" },
+      { name:"Wikipedia",       domain:"da.wikipedia.org",  mono:"W",    url:"https://da.wikipedia.org/w/index.php?search=%s" },
+      { name:"Google Maps",     domain:"maps.google.com",   mono:"M",    url:"https://www.google.com/maps/search/?api=1&query=%s" },
     ],
-    [ // film, tv & medier
-      { name:"YouTube",        sub:"video",       domain:"youtube.com",       mono:"YT",  url:"https://www.youtube.com/results?search_query=%s" },
-      { name:"IMDb",           sub:"film & tv",   domain:"imdb.com",          mono:"IMDb",url:"https://www.imdb.com/find/?q=%s" },
-      { name:"DR TV",          sub:"drtv",        domain:"dr.dk",             mono:"DR",  url:"https://www.dr.dk/drtv/soeg?q=%s" },
-      { name:"Netflix",        sub:"stream",      domain:"netflix.com",       mono:"N",   url:"https://www.netflix.com/search?q=%s" },
-      { name:"HBO Max",        sub:"stream",      domain:"hbomax.com",        mono:"HBO", url:"https://www.hbomax.com/search?q=%s" },
-      { name:"Disney+",        sub:"stream",      domain:"disneyplus.com",    mono:"D+",  url:"https://www.disneyplus.com/search?q=%s" },
-      { name:"Spotify",        sub:"musik",       domain:"spotify.com",       mono:"S",   url:"https://open.spotify.com/search/%s" },
+    [
+      { name:"YouTube",         domain:"youtube.com",       mono:"YT",   url:"https://www.youtube.com/results?search_query=%s" },
+      { name:"IMDb",            domain:"imdb.com",          mono:"IMDb", url:"https://www.imdb.com/find/?q=%s" },
+      { name:"DR TV",           domain:"dr.dk",             mono:"DR",   url:"https://www.dr.dk/drtv/soeg?q=%s" },
+      { name:"Netflix",         domain:"netflix.com",       mono:"N",    url:"https://www.netflix.com/search?q=%s" },
+      { name:"HBO Max",         domain:"hbomax.com",        mono:"HBO",  url:"https://www.hbomax.com/search?q=%s" },
+      { name:"Disney+",         domain:"disneyplus.com",    mono:"D+",   url:"https://www.disneyplus.com/search?q=%s" },
+      { name:"Spotify",         domain:"spotify.com",       mono:"S",    url:"https://open.spotify.com/search/%s" },
     ],
-    [ // socialt
-      { name:"Reddit",         sub:"tråde",       domain:"reddit.com",        mono:"r/",  url:"https://www.reddit.com/search/?q=%s" },
-      { name:"Instagram",      sub:"foto & reels",domain:"instagram.com",     mono:"IG",  url:"https://www.instagram.com/explore/search/keyword/?q=%s" },
-      { name:"Facebook",       sub:"socialt",     domain:"facebook.com",      mono:"f",   url:"https://www.facebook.com/search/top/?q=%s" },
+    [
+      { name:"Reddit",          domain:"reddit.com",        mono:"r/",   url:"https://www.reddit.com/search/?q=%s" },
+      { name:"Instagram",       domain:"instagram.com",     mono:"IG",   url:"https://www.instagram.com/explore/search/keyword/?q=%s" },
+      { name:"Facebook",        domain:"facebook.com",      mono:"f",    url:"https://www.facebook.com/search/top/?q=%s" },
     ],
-    [ // AI
-      { name:"ChatGPT",        sub:"AI-prompt",   domain:"chatgpt.com",       mono:"GPT", url:"https://chatgpt.com/?q=%s" },
-      { name:"Claude",         sub:"AI-prompt",   domain:"claude.ai",         mono:"C",   url:"https://claude.ai/new?q=%s" },
+    [
+      { name:"ChatGPT",         domain:"chatgpt.com",       mono:"GPT",  url:"https://chatgpt.com/?q=%s" },
+      { name:"Claude",          domain:"claude.ai",         mono:"C",    url:"https://claude.ai/new?q=%s" },
     ],
   ];
 
   const input = document.getElementById('q');
   const groupsEl = document.getElementById('groups');
   const clearBtn = document.getElementById('clear');
+  const params = new URLSearchParams(location.search);
 
-  // Prefill from ?q= (this is where the text-selection app drops the selected text).
-  const initial = new URLSearchParams(location.search).get('q') || '';
-  input.value = initial;
+  // ---- Shared link handling (Web Share Target) --------------------------
+  // Different apps put things in different fields, so parse defensively.
+  const shareEl = document.getElementById('share');
+  const sTitle  = document.getElementById('s-title');
+  const sUrl    = document.getElementById('s-url');
+  const copied  = document.getElementById('copied');
 
-  // Build grouped tiles
+  const rawTitle = params.get('title') || '';
+  const rawText  = params.get('text')  || '';
+  let   rawUrl   = params.get('url')   || '';
+
+  const hasShare = !!(rawTitle || rawText || rawUrl);
+
+  if (hasShare){
+    // If no explicit url field, pull the first link out of the text.
+    if (!rawUrl){
+      const m = rawText.match(/https?:\/\/[^\s]+/);
+      if (m) rawUrl = m[0];
+    }
+    // Title: prefer the title field; otherwise the text with the url stripped out.
+    let title = rawTitle.trim();
+    if (!title) title = rawText.replace(rawUrl, '').trim();
+    if (!title) title = rawUrl;
+
+    sTitle.value = title;
+    sUrl.value = rawUrl;
+    shareEl.hidden = false;
+    // Also seed the search box with the title so you can search it too.
+    input.value = title;
+  }
+
+  function currentPieces(){
+    const t = sTitle.value.trim();
+    const u = sUrl.value.trim();
+    return { t, u };
+  }
+  function buildCopy(kind){
+    const { t, u } = currentPieces();
+    if (kind === 'md')    return '[' + t + '](' + u + ')';
+    if (kind === 'url')   return u;
+    if (kind === 'title') return t;
+    if (kind === 'both')  return t + '\n' + u;
+    return '';
+  }
+  async function copyText(text){
+    try{
+      await navigator.clipboard.writeText(text);
+      return true;
+    }catch(e){
+      // Fallback for older browsers / blocked clipboard API
+      try{
+        const ta = document.createElement('textarea');
+        ta.value = text; ta.style.position='fixed'; ta.style.opacity='0';
+        document.body.appendChild(ta); ta.select();
+        const ok = document.execCommand('copy');
+        document.body.removeChild(ta);
+        return ok;
+      }catch(_){ return false; }
+    }
+  }
+  let copiedTimer;
+  document.querySelectorAll('.cbtn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const ok = await copyText(buildCopy(btn.dataset.copy));
+      copied.textContent = ok ? 'Kopieret ✓' : 'Kunne ikke kopiere — markér og kopiér manuelt';
+      copied.style.color = ok ? 'var(--ok)' : 'var(--accent)';
+      clearTimeout(copiedTimer);
+      copiedTimer = setTimeout(() => { copied.textContent = ''; }, 2200);
+    });
+  });
+
+  // ---- Search box prefill (from the text-selection app) -----------------
+  const q = params.get('q');
+  if (q !== null) input.value = q;   // ?q= wins if present
+
+  // ---- Build the service columns ----------------------------------------
   for (const group of GROUPS){
     const g = document.createElement('div');
     g.className = 'group';
-
     for (const s of group){
       const b = document.createElement('button');
-      b.className = 'tile';
-      b.type = 'button';
+      b.className = 'tile'; b.type = 'button';
       b.setAttribute('aria-label', 'Søg på ' + s.name);
-
       const badge = document.createElement('span');
       badge.className = 'badge';
       const img = document.createElement('img');
-      img.alt = '';
-      img.loading = 'lazy';
+      img.alt=''; img.loading='lazy';
       img.src = 'https://www.google.com/s2/favicons?domain=' + s.domain + '&sz=128';
-      // If the logo can't load, fall back to a short label instead of a blank chip.
-      img.addEventListener('error', () => {
-        badge.textContent = s.mono;
-        badge.style.font = '700 13px var(--sans)';
-        badge.style.color = '#1a1a1a';
-      });
+      img.addEventListener('error', () => { badge.textContent = s.mono; badge.style.font='700 12px var(--mono)'; });
       badge.appendChild(img);
-
       const name = document.createElement('span');
-      name.className = 'name';
-      name.textContent = s.name;
-
-      const sub = document.createElement('span');
-      sub.className = 'sub';
-      sub.textContent = s.sub;
-
-      b.append(badge, name, sub);
+      name.className='name'; name.textContent=s.name;
+      b.append(badge, name);
       b.addEventListener('click', () => go(s.url));
       g.appendChild(b);
     }
-
     groupsEl.appendChild(g);
   }
 
   function go(tpl){
     const term = input.value.trim();
-    const url = tpl.replace('%s', encodeURIComponent(term));
-    // Top-level navigation lets Android hand the https link to the native app (App Links).
-    window.location.href = url;
+    window.location.href = tpl.replace('%s', encodeURIComponent(term));
   }
-
   clearBtn.addEventListener('click', () => { input.value=''; input.focus(); });
-
-  // Enter in the field = search the first service (Google).
-  input.addEventListener('keydown', e => {
-    if (e.key === 'Enter') go(GROUPS[0][0].url);
-  });
-
-  // Select all text on focus so a quick edit replaces the whole term.
+  input.addEventListener('keydown', e => { if (e.key === 'Enter') go(GROUPS[0][0].url); });
   input.addEventListener('focus', () => input.select());
+
+  // ---- Register the service worker so the page is installable -----------
+  if ('serviceWorker' in navigator){
+    window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(()=>{}));
+  }
 </script>
 </body>
 </html>
