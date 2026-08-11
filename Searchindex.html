@@ -101,7 +101,7 @@
       <h2>Delt link</h2>
       <div class="field">
         <label for="s-title">Titel</label>
-        <input id="s-title" type="text" autocomplete="off" spellcheck="false">
+        <input id="s-title" type="text" autocomplete="off" spellcheck="false" placeholder="skriv en titel">
       </div>
       <div class="field">
         <label for="s-url">URL</label>
@@ -178,22 +178,43 @@
 
   const hasShare = !!(rawTitle || rawText || rawUrl);
 
+  // Many apps share only the link. Reddit/news URLs usually carry the title as
+  // the last path segment (…/comments/id/some_post_title/) — turn that into text.
+  function prettyFromUrl(u){
+    try{
+      const url = new URL(u);
+      const segs = url.pathname.split('/').filter(Boolean);
+      if (!segs.length) return '';
+      let slug = decodeURIComponent(segs[segs.length - 1]).replace(/\.(html?|php|aspx)$/i,'');
+      // Only use it if it reads like a word-slug, not an id or code.
+      if (!/[a-zæøå].*[-_].*[a-zæøå]/i.test(slug)) return '';
+      slug = slug.replace(/[-_]+/g,' ').replace(/\s+/g,' ').trim();
+      if (slug.length < 3) return '';
+      return slug.charAt(0).toUpperCase() + slug.slice(1);
+    }catch(e){ return ''; }
+  }
+
   if (hasShare){
-    // If no explicit url field, pull the first link out of the text.
+    // If no explicit url field, pull the first link out of the shared text.
     if (!rawUrl){
       const m = rawText.match(/https?:\/\/[^\s]+/);
       if (m) rawUrl = m[0];
     }
-    // Title: prefer the title field; otherwise the text with the url stripped out.
+    // Decide the title in order of preference:
     let title = rawTitle.trim();
-    if (!title) title = rawText.replace(rawUrl, '').trim();
-    if (!title) title = rawUrl;
+    if (!title || title === rawUrl){
+      const leftover = rawText.replace(rawUrl, '').trim();  // text minus the URL
+      if (leftover && leftover !== rawUrl) title = leftover;
+    }
+    if (!title || title === rawUrl){
+      title = prettyFromUrl(rawUrl);                        // derive from the URL itself
+    }
+    if (title === rawUrl) title = '';                       // never show the URL as the title
 
     sTitle.value = title;
     sUrl.value = rawUrl;
     shareEl.hidden = false;
-    // Also seed the search box with the title so you can search it too.
-    input.value = title;
+    if (title) input.value = title;                         // seed search box only with a real title
   }
 
   function currentPieces(){
@@ -203,10 +224,10 @@
   }
   function buildCopy(kind){
     const { t, u } = currentPieces();
-    if (kind === 'md')    return '[' + t + '](' + u + ')';
+    if (kind === 'md')    return t ? '[' + t + '](' + u + ')' : '<' + u + '>';
     if (kind === 'url')   return u;
     if (kind === 'title') return t;
-    if (kind === 'both')  return t + '\n' + u;
+    if (kind === 'both')  return (t ? t + '\n' : '') + u;
     return '';
   }
   async function copyText(text){
