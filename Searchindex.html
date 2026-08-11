@@ -130,9 +130,9 @@
   const clearBtn = document.getElementById('clear');
   const params = new URLSearchParams(location.search);
 
-  // Worker-adressen sættes ÉN gang i config.js, så den IKKE nulstilles, når du
-  // uploader denne fil igen. Mangler config.js/er den tom, bruges kun fallback.
-  const TITLE_WORKER = (window.TITLE_WORKER || "").trim();
+  // Din titel-Worker er bagt ind som standard, så den virker uden opsætning.
+  // (Har du en config.js med window.TITLE_WORKER, overskriver den denne.)
+  const TITLE_WORKER = (window.TITLE_WORKER || "https://henttitel.philipmad70.workers.dev/").trim();
 
   // ---- Shared link handling (Web Share Target) --------------------------
   const shareEl = document.getElementById('share');
