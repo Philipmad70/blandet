@@ -280,8 +280,25 @@
     const term = input.value.trim();
     let enc = encodeURIComponent(term);
     if (tpl.includes('allmusic.com')) enc = enc.replace(/%20/g, '+'); // AllMusic vil have + mellem ord
-    const url = tpl.replace('%s', enc);
-    // Åbn eksternt (browser/rigtig app) i stedet for en intern fane i selve app'en.
+    openExternally(tpl.replace('%s', enc));
+  }
+
+  // Åbn i den fulde Chrome-app (ikke en intern fane i selve app'en) via et
+  // Android intent-link. Chrome sender selv videre til fx YouTube-appen, hvis
+  // domænet har app-links. Falder tilbage til normal åbning uden for Android.
+  function openExternally(url){
+    const isAndroid = /Android/i.test(navigator.userAgent);
+    if (isAndroid && /^https?:\/\//i.test(url)){
+      const scheme = url.split('://')[0];
+      const rest = url.slice(url.indexOf('://') + 3);
+      const intentUrl = 'intent://' + rest +
+        '#Intent;scheme=' + scheme +
+        ';package=com.android.chrome' +
+        ';S.browser_fallback_url=' + encodeURIComponent(url) +
+        ';end';
+      window.location.href = intentUrl;
+      return;
+    }
     const a = document.createElement('a');
     a.href = url; a.target = '_blank'; a.rel = 'noopener noreferrer';
     document.body.appendChild(a); a.click(); a.remove();
