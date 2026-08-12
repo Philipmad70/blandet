@@ -125,7 +125,7 @@
       { name:"Claude",          domain:"claude.ai",         mono:"C",    url:"https://claude.ai/new?q=%s" },
     ],
     [
-      { name:"Apple Podcast",   domain:"podcasts.apple.com", mono:"AP",  url:"https://www.google.com/search?q=%s%20site:podcasts.apple.com" },
+      { name:"Apple Podcast",   domain:"podcasts.apple.com", mono:"AP",  url:"https://www.google.com/search?q=%s%20site:podcasts.apple.com/dk" },
       { name:"Ordnet",          domain:"ordnet.dk",         mono:"ORD",  url:"https://www.google.com/search?q=%s%20ordnet" },
     ],
   ];
@@ -280,7 +280,11 @@
     const term = input.value.trim();
     let enc = encodeURIComponent(term);
     if (tpl.includes('allmusic.com')) enc = enc.replace(/%20/g, '+'); // AllMusic vil have + mellem ord
-    window.location.href = tpl.replace('%s', enc);
+    const url = tpl.replace('%s', enc);
+    // Åbn eksternt (browser/rigtig app) i stedet for en intern fane i selve app'en.
+    const a = document.createElement('a');
+    a.href = url; a.target = '_blank'; a.rel = 'noopener noreferrer';
+    document.body.appendChild(a); a.click(); a.remove();
   }
   clearBtn.addEventListener('click', () => { input.value=''; input.focus(); });
   input.addEventListener('keydown', e => { if (e.key === 'Enter') go(GROUPS[0][0].url); });
