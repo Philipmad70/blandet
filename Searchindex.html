@@ -38,6 +38,9 @@
   .cbtn{font-family:inherit;font-size:12.5px;font-weight:500;border:0;border-radius:9px;padding:8px 11px;background:#e9e9ee;color:var(--ink);cursor:pointer;transition:background .18s ease,color .18s ease}
   .cbtn.flash{background:var(--accent);color:#fff}
   .cbtn:active{transform:scale(.97)}
+  .gembtn{display:inline-block;margin-top:10px;font-family:inherit;font-size:12.5px;font-weight:600;border:0;border-radius:9px;padding:9px 12px;background:var(--accent);color:#fff;cursor:pointer;transition:transform .08s ease,opacity .15s ease}
+  .gembtn:active{transform:scale(.97)}
+  .gembtn.flash{opacity:.6}
   #copied{font-size:12px;color:#1a7f37;margin:9px 2px 0;min-height:15px}
 
   /* Search bar */
@@ -79,6 +82,7 @@
         <button class="cbtn" data-copy="md" type="button">Markdown</button>
         <button class="cbtn" data-copy="html" type="button">HTML</button>
       </div>
+      <button class="gembtn" id="gemini-note" type="button">Tilføj til noten &quot;Klip&quot;</button>
       <p id="copied" role="status" aria-live="polite"></p>
     </section>
 
@@ -250,6 +254,26 @@
     });
   });
 
+  // "Tilføj til noten Klip": send prompt + link videre til Gemini via del-arket.
+  const gemBtn = document.getElementById('gemini-note');
+  if (gemBtn){
+    gemBtn.addEventListener('click', async () => {
+      const { u } = currentPieces();
+      if (!u){ copied.textContent = 'Intet link at sende'; copied.style.color = '#b00020'; return; }
+      const prompt = 'Tilføj til noten "Klip": ' + u;
+      if (navigator.share){
+        try { await navigator.share({ text: prompt }); }
+        catch (e) { /* bruger annullerede — gør ingenting */ }
+      } else {
+        const ok = await copyText(prompt);
+        copied.textContent = ok ? 'Prompt kopieret — indsæt i Gemini' : 'Kunne ikke kopiere';
+        copied.style.color = ok ? '#1a7f37' : '#b00020';
+        clearTimeout(copiedTimer);
+        copiedTimer = setTimeout(() => { copied.textContent = ''; }, 2600);
+      }
+    });
+  }
+
   // ---- Search prefill ---------------------------------------------------
   const q = params.get('q');
   if (q !== null) input.value = q;
@@ -283,24 +307,22 @@
     openExternally(tpl.replace('%s', enc));
   }
 
-  // Åbn i den fulde Chrome-app (ikke en intern fane i selve app'en) via et
-  // Android intent-link. Chrome sender selv videre til fx YouTube-appen, hvis
-  // domænet har app-links. Falder tilbage til normal åbning uden for Android.
+  // Åbn i den eksterne browser (fuld Chrome) i stedet for en intern fane.
+  // Bruger et Android intent-link uden fast pakke, udløst som et rigtigt klik.
   function openExternally(url){
     const isAndroid = /Android/i.test(navigator.userAgent);
+    let href = url;
     if (isAndroid && /^https?:\/\//i.test(url)){
       const scheme = url.split('://')[0];
       const rest = url.slice(url.indexOf('://') + 3);
-      const intentUrl = 'intent://' + rest +
+      href = 'intent://' + rest +
         '#Intent;scheme=' + scheme +
-        ';package=com.android.chrome' +
+        ';action=android.intent.action.VIEW' +
         ';S.browser_fallback_url=' + encodeURIComponent(url) +
         ';end';
-      window.location.href = intentUrl;
-      return;
     }
     const a = document.createElement('a');
-    a.href = url; a.target = '_blank'; a.rel = 'noopener noreferrer';
+    a.href = href; a.target = '_blank'; a.rel = 'noopener noreferrer';
     document.body.appendChild(a); a.click(); a.remove();
   }
   clearBtn.addEventListener('click', () => { input.value=''; input.focus(); });
