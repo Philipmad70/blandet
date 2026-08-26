@@ -538,6 +538,21 @@
 
   window.addEventListener('resize', function(){ hideLookup(); fit(); });
 
+  /* Vises tavlen inde i en ramme (fx Google Sites), kan browseren ikke gemme
+     historikken derinde. Så tilbyder vi at åbne den i sit eget vindue. */
+  var indlejret = false;
+  try { indlejret = (window.self !== window.top); } catch(e){ indlejret = true; }
+
+  if(indlejret){
+    var openBtn = document.createElement('button');
+    openBtn.textContent = 'Åbn i eget vindue';
+    openBtn.title = 'Historikken gemmes kun, når tavlen har sit eget vindue';
+    openBtn.onclick = function(){
+      window.open(location.href, '_blank', 'noopener');
+    };
+    bar.insertBefore(openBtn, bar.firstChild);
+  }
+
   history = loadHist();
   var savedCap = parseInt((function(){ try{ return localStorage.getItem(CAPKEY); }catch(e){ return null; } })(), 10);
   if(!isNaN(savedCap)) cap = Math.max(CAP_MIN, Math.min(CAP_MAX, savedCap));
