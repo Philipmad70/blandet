@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tavlen</title>
+<style>
+  :root{
+    --bg:#f6f2ea;
+    --fg:#1c1a17;
+    --muted:#8d8578;
+    --line:#ddd5c8;
+    --panel:#fbf8f2;
+    --grain:0.075;
+    --sel:#f4d98a;
+    --ui:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,"Times New Roman",serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#15130f;
+      --fg:#efe9df;
+      --muted:#8b8375;
+      --line:#302b24;
+      --panel:#1d1a15;
+      --grain:0.05;
+      --sel:#584d2c;
+    }
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--fg);
+    font-family:var(--ui);
+    overflow:hidden;
+  }
+  /* papirkorn i baggrunden */
+  body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    z-index:0;
+    pointer-events:none;
+    opacity:var(--grain);
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ---------- Skrivefladen ---------- */
+  #pad{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    padding:6vh 6vw;
+    margin:0;
+    border:0;
+    background:transparent;
+    color:var(--fg);
+    font-family:var(--serif);
+    font-weight:600;
+    font-size:110px;
+    line-height:1.18;
+    letter-spacing:-0.005em;
+    white-space:pre-wrap;
+    word-break:break-word;
+    outline:0;
+    resize:none;
+    overflow:hidden;
+    z-index:2;
+  }
+  #pad::selection{background:var(--sel);color:var(--fg)}
+
+  /* ---------- Knapper nederst til højre ---------- */
+  #bar{
+    position:fixed;
+    right:18px;
+    bottom:16px;
+    display:flex;
+    gap:8px;
+    z-index:10;
+    opacity:.26;
+    transition:opacity .25s;
+  }
+  #bar:hover, #bar:focus-within, #bar.awake{opacity:1}
+  #bar button{
+    font:inherit;
+    font-size:13px;
+    font-weight:600;
+    color:var(--muted);
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:999px;
+    padding:9px 16px;
+    cursor:pointer;
+    line-height:1;
+  }
+  #bar button:hover{color:var(--fg);border-color:var(--muted)}
+  #bar button:focus-visible{outline:2px solid var(--fg);outline-offset:2px}
+  #bar .step{
+    padding:0;
+    width:32px;
+    height:32px;
+    font-size:16px;
+    font-weight:500;
+  }
+  #bar .step + .step{margin-left:-4px}
+  #bar .step + :not(.step){margin-left:4px}
+
+  /* ---------- Opslag på ordnet.dk ---------- */
+  #lookup{
+    position:fixed;
+    z-index:14;
+    display:flex;
+    align-items:center;
+    gap:7px;
+    font-family:var(--ui);
+    font-size:13px;
+    font-weight:600;
+    color:var(--panel);
+    background:var(--fg);
+    border:0;
+    border-radius:999px;
+    padding:9px 15px;
+    cursor:pointer;
+    box-shadow:0 6px 20px rgba(0,0,0,.22);
+    white-space:nowrap;
+    max-width:min(340px,80vw);
+  }
+  #lookup[hidden]{display:none}
+  #lookup em{
+    font-style:normal;
+    font-family:var(--serif);
+    font-weight:700;
+    max-width:180px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  #lookup svg{flex:0 0 auto;opacity:.7}
+
+  /* usynlig kopi af skrivefeltet – bruges kun til at finde det markerede ords position */
+  #probe{
+    position:absolute;
+    top:0;left:0;
+    visibility:hidden;
+    pointer-events:none;
+    z-index:-1;
+    overflow:hidden;
+  }
+
+  /* ---------- Historik ---------- */
+  #hist{
+    position:fixed;
+    right:18px;
+    bottom:62px;
+    width:min(380px,88vw);
+    max-height:min(60vh,520px);
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:14px;
+    box-shadow:0 14px 40px rgba(0,0,0,.16);
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+    z-index:11;
+  }
+  #hist[hidden]{display:none}
+  #histList{list-style:none;margin:0;padding:6px;overflow-y:auto}
+  #histList li{margin:0}
+  #histList li + li{border-top:1px solid var(--line)}
+  #histList button{
+    display:-webkit-box;
+    -webkit-line-clamp:4;
+    -webkit-box-orient:vertical;
+    width:100%;
+    text-align:left;
+    font-family:var(--serif);
+    font-size:18px;
+    font-weight:600;
+    line-height:1.35;
+    color:var(--fg);
+    background:transparent;
+    border:0;
+    border-radius:9px;
+    padding:10px 12px;
+    cursor:pointer;
+    white-space:pre-wrap;
+    word-break:break-word;
+    overflow:hidden;
+  }
+  #histList button:hover{background:var(--bg)}
+  #histFoot{
+    border-top:1px solid var(--line);
+    padding:8px 12px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  #histFoot span{font-size:12px;color:var(--muted)}
+  #histFoot button{
+    margin-left:auto;
+    font:inherit;font-size:12px;font-weight:600;
+    color:var(--muted);background:transparent;border:0;
+    cursor:pointer;padding:4px;
+  }
+  #histFoot button:hover{color:var(--fg)}
+  .empty{padding:22px 16px;text-align:center;color:var(--muted);font-size:14px;line-height:1.5}
+
+  #toast{
+    position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(14px);
+    background:var(--fg);color:var(--bg);
+    padding:10px 20px;border-radius:999px;
+    font-size:15px;font-weight:700;
+    opacity:0;pointer-events:none;transition:opacity .18s,transform .18s;
+    z-index:20;
+  }
+  #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<textarea id="pad" autofocus spellcheck="false" aria-label="Skrivefelt"></textarea>
+<div id="probe" aria-hidden="true"></div>
+
+<button id="lookup" hidden>
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
+    <circle cx="10.5" cy="10.5" r="6.5"/><line x1="15.5" y1="15.5" x2="21" y2="21"/>
+  </svg>
+  Slå <em id="lookupWord"></em> op
+</button>
+
+<div id="hist" hidden aria-label="Historik">
+  <ul id="histList"></ul>
+  <div id="histFoot">
+    <span>Klik for at hente frem</span>
+    <button id="clearHist">Slet alt</button>
+  </div>
+</div>
+
+<div id="bar">
+  <button id="smaller" class="step" title="Mindre skrift" aria-label="Mindre skrift">−</button>
+  <button id="bigger" class="step" title="Større skrift" aria-label="Større skrift">+</button>
+  <button id="toggleHist" aria-expanded="false">Historik</button>
+  <button id="copyAll">Kopiér alt</button>
+</div>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+  "use strict";
+
+  var KEY = 'tavlen-historik-v1';
+  var LIMIT = 300;
+
+  var pad      = document.getElementById('pad');
+  var bar      = document.getElementById('bar');
+  var histBox  = document.getElementById('hist');
+  var histList = document.getElementById('histList');
+  var toggle   = document.getElementById('toggleHist');
+  var toastEl  = document.getElementById('toast');
+
+  var history = [];
+  var openId  = null;      /* den seddel der lige nu skrives på */
+  var timer   = null;
+
+  var CAPKEY = 'tavlen-storrelse-v1';
+  var MIN = 22, CAP_MIN = 40, CAP_MAX = 300, STEP = 14;
+  var cap = 132;   /* loftet over skriftstørrelsen — styres af − og + */
+
+  /* ---------- besked ---------- */
+  function toast(msg){
+    toastEl.textContent = msg;
+    toastEl.classList.add('show');
+    clearTimeout(toast._t);
+    toast._t = setTimeout(function(){ toastEl.classList.remove('show'); }, 1300);
+  }
+
+  /* ---------- historikken gemmes i browseren ---------- */
+  function loadHist(){
+    try{
+      var raw = localStorage.getItem(KEY);
+      if(!raw) return [];
+      var data = JSON.parse(raw);
+      if(!Array.isArray(data)) return [];
+      return data.filter(function(x){
+        return x && typeof x.text === 'string' && x.text.trim();
+      }).slice(0, LIMIT);
+    }catch(e){ return []; }
+  }
+  function saveHist(){
+    try{ localStorage.setItem(KEY, JSON.stringify(history.slice(0, LIMIT))); }
+    catch(e){}
+  }
+
+  /* ---------- skriften fylder skærmen ---------- */
+  function fit(){
+    var lo = MIN, hi = cap, best = MIN;
+    while(lo <= hi){
+      var mid = (lo + hi) >> 1;
+      pad.style.fontSize = mid + 'px';
+      if(pad.scrollHeight <= pad.clientHeight){ best = mid; lo = mid + 1; }
+      else { hi = mid - 1; }
+    }
+    pad.style.fontSize = best + 'px';
+    pad.scrollTop = 0;
+  }
+
+  /* − og + flytter loftet over skriftstørrelsen.
+     Lang tekst krymper stadig af sig selv, så alt kan være på skærmen. */
+  function step(dir){
+    var current = parseInt(pad.style.fontSize, 10) || cap;
+    var base = (dir < 0) ? Math.min(cap, current) : cap;
+    cap = Math.max(CAP_MIN, Math.min(CAP_MAX, base + dir * STEP));
+    try{ localStorage.setItem(CAPKEY, String(cap)); }catch(e){}
+    hideLookup();
+    fit();
+    pad.focus();
+  }
+  document.getElementById('smaller').onclick = function(){ step(-1); };
+  document.getElementById('bigger').onclick  = function(){ step(1); };
+
+  /* ---------- historik ---------- */
+  function render(){
+    histList.innerHTML = '';
+    if(history.length === 0){
+      var li = document.createElement('li');
+      li.className = 'empty';
+      li.textContent = 'Historikken er tom. Alt du skriver, lægger sig her af sig selv.';
+      histList.appendChild(li);
+      return;
+    }
+    history.forEach(function(item){
+      var li = document.createElement('li');
+      var b  = document.createElement('button');
+      b.textContent = item.text;
+      b.title = 'Hent frem';
+      b.onclick = function(){
+        pad.value = item.text;
+        openId = item.id;
+        fit();
+        pad.focus();
+        show(false);
+      };
+      li.appendChild(b);
+      histList.appendChild(li);
+    });
+  }
+
+  /* Gemmer af sig selv: samme seddel opdateres, mens du skriver.
+     Tømmer du feltet, lukkes sedlen, og næste tekst bliver en ny. */
+  function autosave(){
+    var text = pad.value.trim();
+    if(!text){ openId = null; return; }
+
+    if(openId !== null){
+      for(var i = 0; i < history.length; i++){
+        if(history[i].id === openId){
+          history[i].text = text;
+          if(i !== 0){ history.unshift(history.splice(i,1)[0]); }
+          render(); saveHist();
+          return;
+        }
+      }
+    }
+    openId = String(Date.now()) + '-' + Math.random().toString(36).slice(2,8);
+    history.unshift({ id: openId, text: text });
+    if(history.length > LIMIT) history.length = LIMIT;
+    render(); saveHist();
+  }
+
+  pad.addEventListener('input', function(){
+    hideLookup();
+    fit();
+    clearTimeout(timer);
+    timer = setTimeout(autosave, 900);
+    if(!pad.value.trim()) openId = null;
+  });
+
+  function show(state){
+    autosave();
+    hideLookup();
+    histBox.hidden = !state;
+    toggle.setAttribute('aria-expanded', String(!!state));
+    if(!state) pad.focus();
+  }
+  toggle.onclick = function(){ show(histBox.hidden); };
+
+  document.getElementById('clearHist').onclick = function(){
+    history = [];
+    openId = null;
+    render(); saveHist();
+  };
+
+  /* ---------- kopiér ---------- */
+  document.getElementById('copyAll').onclick = function(){
+    var text = pad.value;
+    if(!text.trim()){ toast('Feltet er tomt'); return; }
+    function fallback(){
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); toast('Kopieret'); }
+      catch(e){ toast('Kunne ikke kopiere'); }
+      document.body.removeChild(ta);
+    }
+    if(navigator.clipboard && window.isSecureContext){
+      navigator.clipboard.writeText(text).then(function(){ toast('Kopieret'); }, fallback);
+    } else { fallback(); }
+    pad.focus();
+  };
+
+  /* ---------- markér et ord → slå det op på ordnet.dk ---------- */
+  var probe      = document.getElementById('probe');
+  var lookupBtn  = document.getElementById('lookup');
+  var lookupWord = document.getElementById('lookupWord');
+  var currentWord = '';
+
+  var COPY = ['fontFamily','fontSize','fontWeight','fontStyle','lineHeight',
+              'letterSpacing','wordSpacing','textTransform','textIndent',
+              'paddingTop','paddingRight','paddingBottom','paddingLeft',
+              'boxSizing','whiteSpace','wordBreak','overflowWrap'];
+
+  function trimWord(s){
+    try { return s.replace(/^[^\p{L}\p{N}]+/u,'').replace(/[^\p{L}\p{N}]+$/u,''); }
+    catch(e){ return s.replace(/^[^0-9A-Za-zÆØÅæøåÉéÜü-]+/,'').replace(/[^0-9A-Za-zÆØÅæøåÉéÜü-]+$/,''); }
+  }
+
+  /* finder hvor det markerede står på skærmen */
+  function selectionRect(){
+    var s = pad.selectionStart, e = pad.selectionEnd;
+    if(!(e > s)) return null;
+
+    var cs = getComputedStyle(pad);
+    COPY.forEach(function(p){ probe.style[p] = cs[p]; });
+    probe.style.width  = pad.clientWidth + 'px';
+    probe.style.height = pad.clientHeight + 'px';
+
+    probe.textContent = pad.value.slice(0, s);
+    var span = document.createElement('span');
+    span.textContent = pad.value.slice(s, e);
+    probe.appendChild(span);
+    probe.appendChild(document.createTextNode(pad.value.slice(e) + '.'));
+
+    var rects = span.getClientRects();
+    if(!rects.length) return null;
+    var r = rects[0];
+    var pr = probe.getBoundingClientRect();
+    var pd = pad.getBoundingClientRect();
+
+    return {
+      left:   r.left - pr.left + pd.left,
+      top:    r.top  - pr.top  + pd.top - pad.scrollTop,
+      width:  r.width,
+      height: r.height
+    };
+  }
+
+  function hideLookup(){
+    lookupBtn.hidden = true;
+    currentWord = '';
+  }
+
+  function updateLookup(){
+    if(document.activeElement !== pad) return;
+
+    var raw = pad.value.slice(pad.selectionStart, pad.selectionEnd);
+    var word = trimWord(raw.trim());
+
+    if(!word || word.length > 60 || /\n/.test(raw)){ hideLookup(); return; }
+
+    var rect = selectionRect();
+    if(!rect){ hideLookup(); return; }
+
+    currentWord = word;
+    lookupWord.textContent = word;
+    lookupBtn.hidden = false;
+
+    var bw = lookupBtn.offsetWidth, bh = lookupBtn.offsetHeight;
+    var left = rect.left + rect.width / 2 - bw / 2;
+    left = Math.max(10, Math.min(window.innerWidth - bw - 10, left));
+
+    var top = rect.top - bh - 12;
+    if(top < 8) top = rect.top + rect.height + 12;
+    top = Math.min(top, window.innerHeight - bh - 8);
+
+    lookupBtn.style.left = Math.round(left) + 'px';
+    lookupBtn.style.top  = Math.round(top) + 'px';
+  }
+
+  var rafId = null;
+  document.addEventListener('selectionchange', function(){
+    if(rafId) cancelAnimationFrame(rafId);
+    rafId = requestAnimationFrame(updateLookup);
+  });
+
+  /* så markeringen ikke forsvinder, når man klikker på knappen */
+  lookupBtn.addEventListener('mousedown', function(e){ e.preventDefault(); });
+  lookupBtn.addEventListener('click', function(e){
+    e.preventDefault();
+    if(!currentWord) return;
+    window.open('https://ordnet.dk/ddo/ordbog?query=' + encodeURIComponent(currentWord),
+                '_blank', 'noopener');
+  });
+
+  window.addEventListener('scroll', hideLookup, true);
+
+  /* ---------- luk historik ved klik udenfor / Esc ---------- */
+  document.addEventListener('mousedown', function(e){
+    if(!histBox.hidden && !histBox.contains(e.target) && !bar.contains(e.target)) show(false);
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape'){
+      if(!lookupBtn.hidden){ hideLookup(); return; }
+      if(!histBox.hidden){ show(false); return; }
+      autosave();
+      pad.value = '';
+      openId = null;
+      fit();
+      pad.focus();
+    }
+  });
+
+  /* gem også hvis fanen lukkes midt i en sætning */
+  window.addEventListener('beforeunload', autosave);
+  document.addEventListener('visibilitychange', function(){
+    if(document.visibilityState === 'hidden') autosave();
+  });
+
+  /* knapperne træder frem, når musen er i nærheden af hjørnet */
+  document.addEventListener('mousemove', function(e){
+    var near = (window.innerWidth - e.clientX < 320) && (window.innerHeight - e.clientY < 200);
+    bar.classList.toggle('awake', near);
+  });
+
+  window.addEventListener('resize', function(){ hideLookup(); fit(); });
+
+  history = loadHist();
+  var savedCap = parseInt((function(){ try{ return localStorage.getItem(CAPKEY); }catch(e){ return null; } })(), 10);
+  if(!isNaN(savedCap)) cap = Math.max(CAP_MIN, Math.min(CAP_MAX, savedCap));
+  pad.value = '';          /* skrivefeltet er altid tomt ved start */
+  render();
+  fit();
+  pad.focus();
+})();
+</script>
+</body>
+</html>
