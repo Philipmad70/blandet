@@ -233,7 +233,6 @@
 <div id="hist" hidden aria-label="Historik">
   <ul id="histList"></ul>
   <div id="histFoot">
-    <span>Klik for at hente frem</span>
     <button id="clearHist">Slet alt</button>
   </div>
 </div>
@@ -327,7 +326,7 @@
     if(history.length === 0){
       var li = document.createElement('li');
       li.className = 'empty';
-      li.textContent = 'Historikken er tom. Alt du skriver, lægger sig her af sig selv.';
+      li.textContent = 'Historikken er tom.';
       histList.appendChild(li);
       return;
     }
