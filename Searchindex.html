@@ -41,6 +41,8 @@
   .gembtn{display:inline-block;margin-top:10px;font-family:inherit;font-size:12.5px;font-weight:600;border:0;border-radius:9px;padding:9px 12px;background:var(--accent);color:#fff;cursor:pointer;transition:transform .08s ease,opacity .15s ease}
   .gembtn:active{transform:scale(.97)}
   .gembtn.flash{opacity:.6}
+  .macbtn{display:inline-block;margin:10px 0 0 8px;font-family:inherit;font-size:12.5px;font-weight:600;border:0;border-radius:9px;padding:9px 12px;background:#e9e9ee;color:var(--ink);cursor:pointer;transition:transform .08s ease}
+  .macbtn:active{transform:scale(.97)}
   #copied{font-size:12px;color:#1a7f37;margin:9px 2px 0;min-height:15px}
 
   /* Search bar */
@@ -83,6 +85,7 @@
         <button class="cbtn" data-copy="html" type="button">HTML</button>
       </div>
       <button class="gembtn" id="gemini-note" type="button">Tilføj til noten &quot;Klip&quot;</button>
+      <button class="macbtn" id="open-mac" type="button">Åbn URL på Mac</button>
       <p id="copied" role="status" aria-live="polite"></p>
     </section>
 
@@ -271,6 +274,28 @@
         clearTimeout(copiedTimer);
         copiedTimer = setTimeout(() => { copied.textContent = ''; }, 2600);
       }
+    });
+  }
+
+  // "Åbn URL på Mac": send linket til en ntfy-topic, som Mac'en lytter på og åbner.
+  // Topic'et fungerer som en adgangskode — brug præcis det samme på Mac'en.
+  const MAC_TOPIC = "soeg-mac-4b7kq9zt";
+  const macBtn = document.getElementById('open-mac');
+  if (macBtn){
+    macBtn.addEventListener('click', async () => {
+      const { u } = currentPieces();
+      if (!u){ copied.textContent = 'Intet link at sende'; copied.style.color = '#b00020'; return; }
+      try {
+        const r = await fetch('https://ntfy.sh/' + MAC_TOPIC, { method: 'POST', body: u });
+        const ok = r.ok;
+        copied.textContent = ok ? 'Sendt til Mac ✓' : 'Kunne ikke sende';
+        copied.style.color = ok ? '#1a7f37' : '#b00020';
+      } catch (e) {
+        copied.textContent = 'Kunne ikke sende (ingen forbindelse?)';
+        copied.style.color = '#b00020';
+      }
+      clearTimeout(copiedTimer);
+      copiedTimer = setTimeout(() => { copied.textContent = ''; }, 2600);
     });
   }
 
