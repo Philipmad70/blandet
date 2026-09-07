@@ -36,13 +36,10 @@
   .field input:focus{border-color:var(--accent)}
   .copybtns{display:flex;flex-wrap:wrap;gap:7px;margin-top:3px}
   .cbtn{font-family:inherit;font-size:12.5px;font-weight:500;border:0;border-radius:9px;padding:8px 11px;background:#e9e9ee;color:var(--ink);cursor:pointer;transition:background .18s ease,color .18s ease}
-  .cbtn.flash{background:var(--accent);color:#fff}
-  .cbtn:active{transform:scale(.97)}
-  .gembtn{display:inline-block;margin-top:10px;font-family:inherit;font-size:12.5px;font-weight:600;border:0;border-radius:9px;padding:9px 12px;background:var(--accent);color:#fff;cursor:pointer;transition:transform .08s ease,opacity .15s ease}
-  .gembtn:active{transform:scale(.97)}
-  .gembtn.flash{opacity:.6}
-  .macbtn{display:inline-block;margin:10px 0 0 8px;font-family:inherit;font-size:12.5px;font-weight:600;border:0;border-radius:9px;padding:9px 12px;background:#e9e9ee;color:var(--ink);cursor:pointer;transition:transform .08s ease}
-  .macbtn:active{transform:scale(.97)}
+  .gembtn{display:inline-block;margin-top:10px;font-family:inherit;font-size:12.5px;font-weight:600;border:0;border-radius:9px;padding:9px 12px;background:#e9e9ee;color:var(--ink);cursor:pointer;transition:background .18s ease,color .18s ease}
+  .macbtn{display:inline-block;margin:10px 0 0 8px;font-family:inherit;font-size:12.5px;font-weight:600;border:0;border-radius:9px;padding:9px 12px;background:#e9e9ee;color:var(--ink);cursor:pointer;transition:background .18s ease,color .18s ease}
+  .cbtn:active,.gembtn:active,.macbtn:active{transform:scale(.96)}
+  .cbtn.flash,.gembtn.flash,.macbtn.flash{background:#1a7f37;color:#fff}
   #copied{font-size:12px;color:#1a7f37;margin:9px 2px 0;min-height:15px}
 
   /* Search bar */
@@ -84,7 +81,7 @@
         <button class="cbtn" data-copy="md" type="button">Markdown</button>
         <button class="cbtn" data-copy="html" type="button">HTML</button>
       </div>
-      <button class="gembtn" id="gemini-note" type="button">Tilføj til noten &quot;Klip&quot;</button>
+      <button class="gembtn" id="gemini-note" type="button">Tilføj til Noter &amp; Links</button>
       <button class="macbtn" id="open-mac" type="button">Åbn URL på Mac</button>
       <p id="copied" role="status" aria-live="polite"></p>
     </section>
@@ -243,31 +240,29 @@
     }
   }
   let copiedTimer;
+  function flash(btn){ btn.classList.add('flash'); setTimeout(() => btn.classList.remove('flash'), 2000); }
   document.querySelectorAll('.cbtn').forEach(btn => {
     btn.addEventListener('click', async () => {
       const ok = await copyText(buildCopy(btn.dataset.copy));
       copied.textContent = ok ? 'Kopieret ✓' : 'Kunne ikke kopiere — markér og kopiér manuelt';
       copied.style.color = ok ? '#1a7f37' : '#b00020';
-      if (ok){
-        btn.classList.add('flash');
-        setTimeout(() => btn.classList.remove('flash'), 1800);
-      }
+      if (ok) flash(btn);
       clearTimeout(copiedTimer);
-      copiedTimer = setTimeout(() => { copied.textContent = ''; }, 2200);
+      copiedTimer = setTimeout(() => { copied.textContent = ''; }, 2400);
     });
   });
 
   // "Tilføj til noten Klip": gemmer linket som et klikbart link i dit Google Doc
   // "Klip" via et Apps Script — helt automatisk, intet åbnes.
-  const KLIP_ENDPOINT = "https://script.google.com/macros/s/AKfycbw3Zxl2cKGFp3KqYyRkjP_VWIIRRBZQD-eQkEBZFC48dBt-E4Rxo0kBmiqPl1vBUPcD/exec";                              // ← indsæt din Apps Script /exec-adresse her
+  const KLIP_ENDPOINT = "";                              // ← indsæt din Apps Script /exec-adresse her
   const KLIP_TOKEN    = "klip-jj283uw8i64sj1wxur3z"; // ← samme hemmelige token som i scriptet
   const gemBtn = document.getElementById('gemini-note');
   if (gemBtn){
     gemBtn.addEventListener('click', async () => {
       const { t, u } = currentPieces();
-      if (!u){ copied.textContent = 'Intet link at gemme'; copied.style.color = '#b00020'; return; }
+      if (!u && !t){ copied.textContent = 'Intet at tilføje'; copied.style.color = '#b00020'; return; }
       if (!KLIP_ENDPOINT){
-        copied.textContent = 'Klip er ikke sat op endnu (mangler Apps Script-adresse)';
+        copied.textContent = 'Noter & Links er ikke sat op endnu (mangler Apps Script-adresse)';
         copied.style.color = '#b00020';
         clearTimeout(copiedTimer); copiedTimer = setTimeout(() => { copied.textContent=''; }, 3000);
         return;
@@ -276,11 +271,11 @@
                        '&url=' + encodeURIComponent(u) + '&title=' + encodeURIComponent(t || '');
       try {
         await fetch(endpoint, { method: 'GET', mode: 'no-cors' });
-        copied.textContent = 'Gemt i Klip ✓';
+        copied.textContent = 'Tilføjet ✓';
         copied.style.color = '#1a7f37';
-        gemBtn.classList.add('flash'); setTimeout(() => gemBtn.classList.remove('flash'), 1800);
+        flash(gemBtn);
       } catch (e) {
-        copied.textContent = 'Kunne ikke gemme (ingen forbindelse?)';
+        copied.textContent = 'Kunne ikke tilføje (ingen forbindelse?)';
         copied.style.color = '#b00020';
       }
       clearTimeout(copiedTimer);
@@ -301,6 +296,7 @@
         const ok = r.ok;
         copied.textContent = ok ? 'Sendt til Mac ✓' : 'Kunne ikke sende';
         copied.style.color = ok ? '#1a7f37' : '#b00020';
+        if (ok) flash(macBtn);
       } catch (e) {
         copied.textContent = 'Kunne ikke sende (ingen forbindelse?)';
         copied.style.color = '#b00020';
