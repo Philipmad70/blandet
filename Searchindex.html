@@ -257,23 +257,34 @@
     });
   });
 
-  // "Tilføj til noten Klip": send prompt + link videre til Gemini via del-arket.
+  // "Tilføj til noten Klip": gemmer linket som et klikbart link i dit Google Doc
+  // "Klip" via et Apps Script — helt automatisk, intet åbnes.
+  const KLIP_ENDPOINT = "";https://script.google.com/macros/s/AKfycbz7lhigYIoJV9P9KkIZziWrS63SWrGQajMJ20mAgs763-ouYbrA2SuGVjjQK8_n_KQ2/exec                              // ← indsæt din Apps Script /exec-adresse her
+  const KLIP_TOKEN    = "Noter&Links"; // ← samme hemmelige token som i scriptet
   const gemBtn = document.getElementById('gemini-note');
   if (gemBtn){
     gemBtn.addEventListener('click', async () => {
-      const { u } = currentPieces();
-      if (!u){ copied.textContent = 'Intet link at sende'; copied.style.color = '#b00020'; return; }
-      const prompt = 'Tilføj til noten "Klip": ' + u;
-      if (navigator.share){
-        try { await navigator.share({ text: prompt }); }
-        catch (e) { /* bruger annullerede — gør ingenting */ }
-      } else {
-        const ok = await copyText(prompt);
-        copied.textContent = ok ? 'Prompt kopieret — indsæt i Gemini' : 'Kunne ikke kopiere';
-        copied.style.color = ok ? '#1a7f37' : '#b00020';
-        clearTimeout(copiedTimer);
-        copiedTimer = setTimeout(() => { copied.textContent = ''; }, 2600);
+      const { t, u } = currentPieces();
+      if (!u){ copied.textContent = 'Intet link at gemme'; copied.style.color = '#b00020'; return; }
+      if (!KLIP_ENDPOINT){
+        copied.textContent = 'Klip er ikke sat op endnu (mangler Apps Script-adresse)';
+        copied.style.color = '#b00020';
+        clearTimeout(copiedTimer); copiedTimer = setTimeout(() => { copied.textContent=''; }, 3000);
+        return;
       }
+      const endpoint = KLIP_ENDPOINT + '?token=' + encodeURIComponent(KLIP_TOKEN) +
+                       '&url=' + encodeURIComponent(u) + '&title=' + encodeURIComponent(t || '');
+      try {
+        await fetch(endpoint, { method: 'GET', mode: 'no-cors' });
+        copied.textContent = 'Gemt i Klip ✓';
+        copied.style.color = '#1a7f37';
+        gemBtn.classList.add('flash'); setTimeout(() => gemBtn.classList.remove('flash'), 1800);
+      } catch (e) {
+        copied.textContent = 'Kunne ikke gemme (ingen forbindelse?)';
+        copied.style.color = '#b00020';
+      }
+      clearTimeout(copiedTimer);
+      copiedTimer = setTimeout(() => { copied.textContent = ''; }, 2600);
     });
   }
 
@@ -359,4 +370,4 @@
   }
 </script>
 </body>
-</html>
+</html>token
