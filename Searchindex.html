@@ -38,8 +38,10 @@
   .cbtn{font-family:inherit;font-size:12.5px;font-weight:500;border:0;border-radius:9px;padding:8px 11px;background:#e9e9ee;color:var(--ink);cursor:pointer;transition:background .18s ease,color .18s ease}
   .gembtn{display:inline-block;margin-top:10px;font-family:inherit;font-size:12.5px;font-weight:600;border:0;border-radius:9px;padding:9px 12px;background:#e9e9ee;color:var(--ink);cursor:pointer;transition:background .18s ease,color .18s ease}
   .macbtn{display:inline-block;margin:10px 0 0 8px;font-family:inherit;font-size:12.5px;font-weight:600;border:0;border-radius:9px;padding:9px 12px;background:#e9e9ee;color:var(--ink);cursor:pointer;transition:background .18s ease,color .18s ease}
-  .cbtn:active,.gembtn:active,.macbtn:active{transform:scale(.96)}
-  .cbtn.flash,.gembtn.flash,.macbtn.flash{background:#1a7f37;color:#fff}
+  .geminibtn{display:inline-flex;align-items:center;gap:7px;margin-top:12px;font-family:inherit;font-size:12.5px;font-weight:600;border:0;border-radius:9px;padding:9px 12px;background:#e9e9ee;color:var(--ink);cursor:pointer;transition:background .18s ease,color .18s ease}
+  .geminibtn .gicon{width:16px;height:16px;object-fit:contain;display:block}
+  .cbtn:active,.gembtn:active,.macbtn:active,.geminibtn:active{transform:scale(.96)}
+  .cbtn.flash,.gembtn.flash,.macbtn.flash,.geminibtn.flash{background:#1a7f37;color:#fff}
   #copied{font-size:12px;color:#1a7f37;margin:9px 2px 0;min-height:15px}
 
   /* Search bar */
@@ -84,6 +86,7 @@
       <button class="gembtn" id="gemini-note" type="button">Tilføj til Noter &amp; Links</button>
       <button class="macbtn" id="open-mac" type="button">Åbn URL på Mac</button>
       <p id="copied" role="status" aria-live="polite"></p>
+      <button class="geminibtn" id="gemini-share" type="button"><img class="gicon" src="https://www.google.com/s2/favicons?domain=gemini.google.com&amp;sz=128" alt="">Tilføj til noten &quot;Klip&quot;</button>
     </section>
 
     <div class="bar">
@@ -254,7 +257,7 @@
 
   // "Tilføj til noten Klip": gemmer linket som et klikbart link i dit Google Doc
   // "Klip" via et Apps Script — helt automatisk, intet åbnes.
-  const KLIP_ENDPOINT = "https://script.google.com/macros/s/AKfycbw3Zxl2cKGFp3KqYyRkjP_VWIIRRBZQD-eQkEBZFC48dBt-E4Rxo0kBmiqPl1vBUPcD/exec";                              // ← indsæt din Apps Script /exec-adresse her
+  const KLIP_ENDPOINT = "";                              // ← indsæt din Apps Script /exec-adresse her
   const KLIP_TOKEN    = "klip-jj283uw8i64sj1wxur3z"; // ← samme hemmelige token som i scriptet
   const gemBtn = document.getElementById('gemini-note');
   if (gemBtn){
@@ -306,8 +309,26 @@
     });
   }
 
-  // ---- Search prefill ---------------------------------------------------
-  const q = params.get('q');
+  // "Tilføj til noten Klip" (Gemini): åbner del-arket med en færdig Keep-prompt.
+  const gemShareBtn = document.getElementById('gemini-share');
+  if (gemShareBtn){
+    gemShareBtn.addEventListener('click', async () => {
+      const { t, u } = currentPieces();
+      if (!u && !t){ copied.textContent = 'Intet at sende'; copied.style.color = '#b00020'; return; }
+      const content = u ? ((t ? t + ' — ' : '') + u) : t;
+      const prompt = 'Tilføj til Google Keep noten "Klip": ' + content;
+      flash(gemShareBtn);
+      if (navigator.share){
+        try { await navigator.share({ text: prompt }); }
+        catch (e) { /* bruger annullerede */ }
+      } else {
+        await copyText(prompt);
+        copied.textContent = 'Prompt kopieret — indsæt i Gemini';
+        copied.style.color = '#1a7f37';
+        clearTimeout(copiedTimer); copiedTimer = setTimeout(() => { copied.textContent=''; }, 2600);
+      }
+    });
+  }
   if (q !== null) input.value = q;
 
   // ---- Build grouped icon grids -----------------------------------------
