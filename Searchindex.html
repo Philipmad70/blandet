@@ -329,6 +329,8 @@
       }
     });
   }
+  // ---- Søgefelt prefill (fra tekst-markerings-appen) --------------------
+  const q = params.get('q');
   if (q !== null) input.value = q;
 
   // ---- Build grouped icon grids -----------------------------------------
