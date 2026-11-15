@@ -28,47 +28,68 @@
   .wrap{max-width:540px;margin:0 auto}
   [hidden]{display:none !important}
 
-  /* Delt-panel og Send-til-telefon-panel */
-  .panel{background:#f7f7f9;border-radius:16px;padding:14px 14px 13px;margin-bottom:20px}
-  .panel h2{font-size:12px;font-weight:600;color:var(--muted);margin:0 0 10px}
-  .sub{font-size:11px;font-weight:600;color:var(--muted);margin:14px 0 6px;text-transform:uppercase;letter-spacing:.04em}
-  .field{margin-bottom:9px}
-  .field label{display:block;font-size:11px;color:var(--muted);margin:0 0 4px}
-  .field input,.field textarea{width:100%;border:1px solid var(--line);background:#fff;border-radius:10px;padding:9px 10px;font-size:13px;color:var(--ink);font-family:inherit;outline:0}
-  .field textarea{resize:vertical;min-height:84px;line-height:1.45}
-  .field input:focus,.field textarea:focus{border-color:var(--accent)}
-  .btnrow{display:flex;flex-wrap:wrap;gap:7px}
-  .cbtn{display:inline-flex;align-items:center;gap:6px;font-family:inherit;font-size:12.5px;font-weight:500;border:0;border-radius:9px;padding:8px 11px;background:#e9e9ee;color:var(--ink);cursor:pointer;text-decoration:none;transition:background .18s ease,color .18s ease}
-  .cbtn.strong{font-weight:600}
-  .cbtn.dark{background:var(--ink);color:#fff}
-  .cbtn .gicon{width:16px;height:16px;object-fit:contain;display:block}
-  .cbtn:active{transform:scale(.96)}
-  .cbtn.flash{background:#1a7f37;color:#fff}
-  .cbtn[disabled]{opacity:.5}
-  #copied,#tp-status{font-size:12px;margin:9px 2px 0;min-height:15px}
+  /* ===== Handlingsark (det delte) ===== */
+  .dim{position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:20}
+  .sheet{position:fixed;left:0;right:0;bottom:0;z-index:21;margin:0 auto;max-width:560px;
+    background:#fff;border-radius:24px 24px 0 0;box-shadow:0 -10px 30px rgba(0,0,0,.16);
+    max-height:88dvh;display:flex;flex-direction:column;
+    padding-bottom:env(safe-area-inset-bottom);transition:transform .22s ease}
+  .sheet.full{height:94dvh;max-height:94dvh}
+  .sheet.dragging{transition:none}
+  .grab{flex:0 0 auto;padding:10px 0 8px;touch-action:none;cursor:grab}
+  .grab span{display:block;width:40px;height:4px;border-radius:2px;background:#d4d4d8;margin:0 auto}
+  .sheet .x{position:absolute;right:10px;top:6px;border:0;background:transparent;font-size:16px;color:var(--muted);padding:8px;cursor:pointer}
+  .sheet-body{overflow:auto;overscroll-behavior:contain;padding:2px 16px 22px}
+  .sheet h3{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin:18px 2px 10px;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+  .card{display:flex;gap:10px;align-items:center;background:#f6f6f8;border-radius:14px;padding:10px}
+  .card .fav{flex:0 0 auto;width:46px;height:46px;border-radius:11px;background:#e9e9ee;padding:9px;object-fit:contain;display:grid;place-items:center;font-size:20px}
+  .card .ct{flex:1;min-width:0}
+  .card input{display:block;width:100%;border:0;background:transparent;outline:0;padding:2px 0;font:600 14.5px var(--sans);color:var(--ink)}
+  .card input.u{font:400 11.5px var(--sans);color:var(--muted)}
+  .card textarea{width:100%;border:0;background:transparent;outline:0;resize:none;font:14.5px/1.45 var(--sans);color:var(--ink);min-height:68px;max-height:30dvh}
+  .card.textcard{align-items:stretch}
+
+  .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px 6px}
+  .act,.qt{display:flex;flex-direction:column;align-items:center;gap:6px;background:none;border:0;padding:0;cursor:pointer;
+    font:11.5px/1.2 var(--sans);color:#55555c;text-align:center}
+  .act i,.qt i{width:54px;height:54px;border-radius:16px;background:var(--chip);display:grid;place-items:center;
+    font-style:normal;font-size:21px;color:var(--ink);transition:background .15s ease,transform .08s ease}
+  .act i img,.qt i img{width:26px;height:26px;object-fit:contain}
+  .act:active i,.qt:active i{transform:scale(.93);background:var(--chip-press)}
+  .act.flash i{background:#1a7f37;color:#fff}
+  .act[disabled]{opacity:.5}
+  #copied{font-size:12.5px;margin:12px 2px 0;min-height:16px}
+
+  .reopen{display:flex;align-items:center;gap:8px;width:100%;border:0;background:#f6f6f8;border-radius:14px;padding:10px 12px;margin-bottom:16px;
+    font:500 13px var(--sans);color:var(--ink);cursor:pointer;text-align:left}
+  .reopen span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .reopen b{color:var(--muted);font-weight:500}
 
   /* Delte filer */
-  .thumbs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
-  .thumb{width:88px;height:88px;border-radius:10px;background:#e9e9ee;overflow:hidden;display:grid;place-items:center;font-size:11px;color:var(--muted);text-align:center;padding:4px;word-break:break-all}
+  .thumbs{display:flex;flex-wrap:wrap;gap:8px}
+  .thumb{width:88px;height:88px;border-radius:12px;background:#e9e9ee;overflow:hidden;display:grid;place-items:center;font-size:11px;color:var(--muted);text-align:center;padding:4px;word-break:break-all}
   .thumb img{width:100%;height:100%;object-fit:cover;display:block}
 
   /* Hentet tekst (læsevisning) */
-  #reader{margin-top:14px;border-top:1px solid var(--line);padding-top:12px}
-  .kind{display:inline-block;font-size:11.5px;font-weight:600;border:1px solid var(--ink);border-radius:999px;padding:1px 9px;margin-bottom:8px}
-  #reader article{background:#fff;border-radius:12px;padding:12px 14px;margin-top:10px;font-size:15px;line-height:1.55;max-height:60vh;overflow:auto}
-  #reader article h1{font-size:19px;line-height:1.25;margin:2px 0 10px}
-  #reader article h2{font-size:16px;margin:18px 0 6px}
-  #reader article h3{font-size:14.5px;margin:14px 0 4px}
-  #reader article img{max-width:100%;height:auto;border-radius:8px;display:block;margin:8px 0}
+  .rtop{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+  .back{border:0;background:#ececf0;border-radius:9px;padding:7px 10px;font:500 12.5px var(--sans);color:var(--ink);cursor:pointer}
+  .kind{display:inline-block;font-size:11.5px;font-weight:600;border:1px solid var(--ink);border-radius:999px;padding:1px 9px}
+  .rbtns{display:flex;flex-wrap:wrap;gap:7px}
+  .cbtn{display:inline-flex;align-items:center;gap:6px;font:600 13px var(--sans);border:0;border-radius:10px;padding:9px 12px;background:#e9e9ee;color:var(--ink);cursor:pointer}
+  .cbtn.dark{background:var(--ink);color:#fff}
+  .cbtn.flash{background:#1a7f37;color:#fff}
+  #reader article{font-size:15.5px;line-height:1.6;margin-top:12px}
+  #reader article h1{font-size:21px;line-height:1.25;margin:4px 0 10px}
+  #reader article h2{font-size:17px;margin:20px 0 6px}
+  #reader article h3{font-size:15px;margin:14px 0 4px}
+  #reader article img{max-width:100%;height:auto;border-radius:10px;display:block;margin:10px 0}
   #reader article .src{font-size:12px;word-break:break-all}
   #reader article .meta{color:var(--muted);font-size:13px}
   #reader article blockquote{margin:8px 0;padding-left:12px;border-left:3px solid var(--ink)}
   #reader article ul,#reader article ol{padding-left:20px}
   #reader article li{margin-bottom:4px}
-
-  /* Send til telefon (på Mac) */
-  .drop{border:1.5px dashed #c8c8ce;border-radius:10px;padding:10px;font-size:12.5px;color:var(--muted);text-align:center;margin-bottom:9px;cursor:pointer}
-  .drop.over{border-color:var(--accent);color:var(--accent)}
 
   /* Search bar */
   .bar{display:flex;align-items:center;gap:9px;background:var(--field);border-radius:14px;padding:12px 14px;margin-bottom:26px}
@@ -89,91 +110,14 @@
   .tile:focus-visible .chip{outline:2px solid var(--accent);outline-offset:2px}
   .name{font-size:12px;color:var(--muted);text-align:center;line-height:1.15;max-width:84px}
 
-  @media(prefers-reduced-motion:reduce){.chip,.cbtn{transition:none}.tile:active .chip,.cbtn:active{transform:none}}
+  @media(prefers-reduced-motion:reduce){.chip,.act i,.qt i,.sheet{transition:none}.tile:active .chip,.act:active i,.qt:active i{transform:none}}
 </style>
 </head>
 <body>
   <main class="wrap">
 
-    <!-- ============ DELT (vises når noget er delt til appen) ============ -->
-    <section id="share" class="panel" hidden>
-      <h2 id="share-h">Delt link</h2>
-
-      <div class="thumbs" id="thumbs" hidden></div>
-
-      <div class="field" id="f-title">
-        <label for="s-title">Titel</label>
-        <input id="s-title" type="text" autocomplete="off" spellcheck="false" placeholder="skriv en titel">
-      </div>
-      <div class="field" id="f-url">
-        <label for="s-url">URL</label>
-        <input id="s-url" type="text" autocomplete="off" spellcheck="false">
-      </div>
-      <div class="field" id="f-text" hidden>
-        <label for="s-text">Tekst</label>
-        <textarea id="s-text" rows="5" spellcheck="false"></textarea>
-      </div>
-
-      <!-- Link -->
-      <div id="g-link">
-        <div class="btnrow">
-          <button class="cbtn" data-copy="both" type="button">Titel + URL</button>
-          <button class="cbtn" data-copy="md" type="button">Markdown</button>
-          <button class="cbtn" data-copy="html" type="button">HTML</button>
-        </div>
-        <p class="sub">UpNote</p>
-        <div class="btnrow">
-          <button class="cbtn strong dark" id="un-fetch" type="button">📝 Hent teksten til UpNote</button>
-          <a class="cbtn" id="un-link" href="#">🔗 Kun linket</a>
-        </div>
-      </div>
-
-      <!-- Tekst -->
-      <div id="g-text" hidden>
-        <div class="btnrow">
-          <a class="cbtn strong dark" id="un-text" href="#">📝 Ny note i UpNote</a>
-          <button class="cbtn" id="copy-text" type="button">📋 Kopiér</button>
-        </div>
-      </div>
-
-      <p class="sub">Send og gem</p>
-      <div class="btnrow">
-        <button class="cbtn strong" id="to-mac" type="button">💻 Send til Mac</button>
-        <button class="cbtn" id="share-on" type="button">↗ Del videre</button>
-        <button class="cbtn" id="gemini-note" type="button">Tilføj til Noter &amp; Links</button>
-        <button class="cbtn" id="gemini-share" type="button"><img class="gicon" src="https://www.google.com/s2/favicons?domain=gemini.google.com&amp;sz=128" alt="">Tilføj til noten &quot;Klip&quot;</button>
-      </div>
-      <p id="copied" role="status" aria-live="polite"></p>
-
-      <!-- Hentet tekst -->
-      <div id="reader" hidden>
-        <span class="kind" id="r-kind"></span>
-        <div class="btnrow">
-          <a class="cbtn strong dark" id="r-open" href="#">📝 Åbn i UpNote</a>
-          <button class="cbtn" id="r-share" type="button">↗ Del</button>
-          <button class="cbtn" id="r-copy" type="button">📋 Kopiér</button>
-          <button class="cbtn" id="r-toggle" type="button" hidden></button>
-        </div>
-        <article id="r-article"></article>
-      </div>
-    </section>
-
-    <!-- ============ SEND TIL TELEFON (kun på computer) ============ -->
-    <section id="tophone" class="panel" hidden>
-      <h2>📱 Send til telefon</h2>
-      <div class="field">
-        <textarea id="tp-text" rows="3" placeholder="Skriv eller indsæt et link eller en tekst … (eller sæt et billede ind med ⌘V)"></textarea>
-      </div>
-      <label class="drop" id="tp-drop">
-        <input id="tp-files" type="file" multiple hidden>
-        <span id="tp-drop-label">Træk billeder/filer hertil, eller klik for at vælge</span>
-      </label>
-      <div class="btnrow">
-        <button class="cbtn strong dark" id="tp-send" type="button">📱 Send</button>
-        <button class="cbtn" id="tp-clear" type="button">Ryd</button>
-      </div>
-      <p id="tp-status" role="status" aria-live="polite"></p>
-    </section>
+    <!-- Lille knap til at åbne arket igen, når man har lukket det -->
+    <button class="reopen" id="reopen" type="button" hidden>↑ <span id="reopen-t"></span><b>Vis</b></button>
 
     <div class="bar">
       <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#8a8a90" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
@@ -185,6 +129,66 @@
 
     <div id="groups"></div>
   </main>
+
+  <!-- ============ HANDLINGSARK (vises når noget er delt til appen) ============ -->
+  <div class="dim" id="dim" hidden></div>
+  <section class="sheet" id="share" role="dialog" aria-label="Det delte" hidden>
+    <div class="grab" id="grab"><span></span></div>
+    <button class="x" id="sheet-close" type="button" aria-label="Luk">✕</button>
+    <div class="sheet-body" id="sheet-body">
+
+      <div id="main-view">
+        <!-- Kortet øverst: link, tekst eller filer -->
+        <div class="card" id="card-link">
+          <img class="fav" id="fav" alt="">
+          <div class="ct">
+            <input id="s-title" type="text" autocomplete="off" spellcheck="false" placeholder="skriv en titel" aria-label="Titel">
+            <input id="s-url" class="u" type="text" autocomplete="off" spellcheck="false" aria-label="Link">
+          </div>
+        </div>
+        <div class="thumbs" id="thumbs" hidden></div>
+        <div class="card textcard" id="card-text" hidden>
+          <textarea id="s-text" rows="3" spellcheck="false" aria-label="Tekst"></textarea>
+        </div>
+
+        <h3 id="act-h">Gør noget med linket</h3>
+        <div class="grid4" id="acts">
+          <button class="act" id="scrape"       data-for="link"  type="button"><i>📄</i>Hent tekst</button>
+          <button class="act" id="to-mac"       data-for="link text files" type="button"><i>💻</i>Til Mac</button>
+          <button class="act" data-copy="both"  data-for="link"  type="button"><i>📋</i>Kopiér</button>
+          <button class="act" id="copy-text"    data-for="text"  type="button"><i>📋</i>Kopiér</button>
+          <button class="act" id="share-link"   data-for="link"  type="button"><i>↗</i>Del</button>
+          <button class="act" id="share-text"   data-for="text"  type="button"><i>↗</i>Del</button>
+          <button class="act" id="share-on"     data-for="files" type="button"><i>↗</i>Del</button>
+          <button class="act" id="gemini-note"  data-for="link"  type="button"><i>🗒</i>Noter &amp; Links</button>
+          <button class="act" id="gemini-share" data-for="link"  type="button"><i><img src="https://www.google.com/s2/favicons?domain=gemini.google.com&amp;sz=128" alt="" onerror="this.replaceWith('✦')"></i>Klip</button>
+          <button class="act" data-copy="md"    data-for="link"  type="button"><i>[ ]</i>Markdown</button>
+          <button class="act" data-copy="html"  data-for="link"  type="button"><i>&lt;/&gt;</i>HTML</button>
+        </div>
+        <p id="copied" role="status" aria-live="polite"></p>
+
+        <div id="sheet-search">
+          <h3 id="search-h">Søg</h3>
+          <div class="grid4" id="quick"></div>
+        </div>
+      </div>
+
+      <!-- Hentet tekst -->
+      <div id="reader" hidden>
+        <div class="rtop">
+          <button class="back" id="r-back" type="button">← Tilbage</button>
+          <span class="kind" id="r-kind"></span>
+        </div>
+        <div class="rbtns">
+          <button class="cbtn dark" id="r-share" type="button">↗ Del</button>
+          <button class="cbtn" id="r-copy" type="button">📋 Kopiér</button>
+          <button class="cbtn" id="r-toggle" type="button" hidden></button>
+        </div>
+        <article id="r-article"></article>
+      </div>
+
+    </div>
+  </section>
 
 <script src="config.js"></script>
 <script>
@@ -229,9 +233,8 @@
   // Noter & Links (Apps Script) – sættes i config.js, så den ikke forsvinder ved ny upload
   const KLIP_ENDPOINT = (window.KLIP_ENDPOINT || "").trim();
   const KLIP_TOKEN    = "klip-jj283uw8i64sj1wxur3z";
-  // ntfy-emner. Virker som adgangskoder – brug præcis de samme på Mac og i ntfy-appen.
-  const MAC_TOPIC   = "soeg-mac-4b7kq9zt";      // telefon → Mac
-  const PHONE_TOPIC = "soeg-tlf-r5akei4c4j";    // Mac → telefon
+  // ntfy-emnet, Snild lytter på ("Modtag fra telefonen"). Sættes i config.js.
+  const MAC_TOPIC = (window.MAC_TOPIC || "").trim();
   // =======================================================
 
   /* ==== Udtræk: opskrift eller artikel fra et HTML-dokument ==== */
@@ -453,7 +456,6 @@
   }
   function flash(btn){ btn.classList.add('flash'); setTimeout(() => btn.classList.remove('flash'), 2000); }
   function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-  function mdEsc(s){ return String(s).replace(/([\\*_`\[\]])/g,'\\$1'); }
   async function copyText(text){
     try{ await navigator.clipboard.writeText(text); return true; }
     catch(e){
@@ -484,12 +486,6 @@
     const r = await fetch('https://ntfy.sh/' + topic + (qs ? '?' + qs : ''), { method:'POST', body });
     return r.ok;
   }
-  function upnoteUrl(title, markdown){
-    return 'upnote://x-callback-url/note/new?title=' + encodeURIComponent(title || '') +
-           '&text=' + encodeURIComponent(markdown || '') + '&markdown=true';
-  }
-  // Almindelig tekst → markdown, hvor linjeskift bevares
-  function textToMd(t){ return mdEsc(t).replace(/\r/g,'').replace(/\n/g, '  \n'); }
 
   // ==================== DELT INDHOLD ====================
   const shareEl = $('share');
@@ -521,19 +517,79 @@
     }catch(e){ return ''; }
   }
 
+  // ---------- Handlingsarket ----------
+  const dimEl = $('dim');
+  function term(){
+    const t = mode === 'link' ? sTitle.value : sText.value;
+    return t.replace(/\s+/g,' ').trim().slice(0, 300);
+  }
+  function updateSearchHead(){
+    const t = term();
+    $('sheet-search').hidden = !t;
+    $('search-h').textContent = 'Søg efter "' + (t.length > 40 ? t.slice(0, 38) + '…' : t) + '"';
+    input.value = t;
+    $('reopen-t').textContent = mode === 'files' ? (nFiles > 1 ? nFiles + ' delte filer' : 'Delt fil') : (t || sUrl.value);
+  }
+  function openSheet(){
+    dimEl.hidden = false; shareEl.hidden = false; $('reopen').hidden = true;
+    document.body.style.overflow = 'hidden';
+  }
+  function closeSheet(){
+    dimEl.hidden = true; shareEl.hidden = true;
+    document.body.style.overflow = '';
+    if (hasShare) $('reopen').hidden = false;
+  }
+  dimEl.addEventListener('click', closeSheet);
+  $('sheet-close').addEventListener('click', closeSheet);
+  $('reopen').addEventListener('click', openSheet);
+  // Træk håndtaget ned for at lukke
+  (function(){
+    const grab = $('grab'); let y0 = null, dy = 0;
+    grab.addEventListener('pointerdown', (e) => { y0 = e.clientY; dy = 0; shareEl.classList.add('dragging'); grab.setPointerCapture(e.pointerId); });
+    grab.addEventListener('pointermove', (e) => { if (y0 === null) return; dy = Math.max(0, e.clientY - y0); shareEl.style.transform = 'translateY(' + dy + 'px)'; });
+    const end = () => { if (y0 === null) return; y0 = null; shareEl.classList.remove('dragging'); shareEl.style.transform = ''; if (dy > 90) closeSheet(); };
+    grab.addEventListener('pointerup', end); grab.addEventListener('pointercancel', end);
+  })();
+  sTitle.addEventListener('input', updateSearchHead);
+  sText.addEventListener('input', updateSearchHead);
+
+  // Hurtig-søgning i arket
+  const QUICK = ['Google','YouTube','Wikipedia','Google Billeder','Spotify','ChatGPT','IMDb'];
+  (function(){
+    const all = GROUPS.flat(), box = $('quick');
+    QUICK.map(n => all.find(x => x.name === n)).filter(Boolean).forEach(sv => {
+      const b = document.createElement('button'); b.className = 'qt'; b.type = 'button';
+      const i = document.createElement('i'); const img = document.createElement('img'); img.alt = '';
+      img.src = 'https://www.google.com/s2/favicons?domain=' + sv.domain + '&sz=128';
+      img.addEventListener('error', () => { i.textContent = sv.mono; i.style.font = '600 14px var(--sans)'; });
+      i.appendChild(img); b.append(i, document.createTextNode(sv.name === 'Google Billeder' ? 'Billeder' : sv.name));
+      b.addEventListener('click', () => { input.value = term(); go(sv.url); });
+      box.appendChild(b);
+    });
+    const more = document.createElement('button'); more.className = 'qt'; more.type = 'button';
+    more.innerHTML = '<i>⋯</i>Flere';
+    more.addEventListener('click', () => { closeSheet(); window.scrollTo({ top:0, behavior:'smooth' }); });
+    box.appendChild(more);
+  })();
+
   function showMode(m){
     mode = m;
-    $('share-h').textContent = m === 'files' ? (nFiles > 1 ? 'Delte filer' : 'Delt fil') : m === 'text' ? 'Delt tekst' : 'Delt link';
-    $('f-title').hidden = m !== 'link';
-    $('f-url').hidden   = m !== 'link';
-    $('f-text').hidden  = !(m === 'text' || (m === 'files' && sText.value));
-    $('g-link').hidden  = m !== 'link';
-    $('g-text').hidden  = m !== 'text';
-    $('thumbs').hidden  = m !== 'files';
-    $('gemini-note').hidden  = m !== 'link';
-    $('gemini-share').hidden = m !== 'link';
-    $('share-on').hidden = m === 'link' || !navigator.share;
-    shareEl.hidden = false;
+    const word = m === 'files' ? (nFiles > 1 ? 'filerne' : 'filen') : m === 'text' ? 'teksten' : 'linket';
+    $('act-h').textContent = 'Gør noget med ' + word;
+    $('card-link').hidden = m !== 'link';
+    $('card-text').hidden = !(m === 'text' || (m === 'files' && sText.value));
+    $('thumbs').hidden = m !== 'files';
+    document.querySelectorAll('#acts [data-for]').forEach(b => {
+      const fits = b.dataset.for.split(' ').includes(m);
+      b.hidden = !fits || (/^share-/.test(b.id) && !navigator.share);
+    });
+    if (m === 'link'){
+      const fav = $('fav');
+      try { fav.src = 'https://www.google.com/s2/favicons?domain=' + new URL(sUrl.value).hostname + '&sz=128'; } catch(e){}
+      fav.onerror = () => { const ph = document.createElement('span'); ph.className = 'fav'; ph.textContent = '🔗'; fav.replaceWith(ph); };
+    }
+    updateSearchHead();
+    openSheet();
   }
 
   if (hasShare){
@@ -564,7 +620,7 @@
         if (t && !titleLocked){
           const prev = sTitle.value;
           sTitle.value = t;
-          if (!input.value || input.value === prev) input.value = t;
+          updateSearchHead();
         }
       });
     } else {
@@ -633,18 +689,13 @@
     });
   });
 
-  // ---------- UpNote ----------
-  // Kun linket: href sættes i klik-øjeblikket, så rettelser i felterne kommer med
-  $('un-link').addEventListener('click', function(){
-    const { t, u } = currentPieces();
-    this.href = upnoteUrl(t || u, '[' + mdEsc(u) + '](' + u + ')');
+  $('share-link').addEventListener('click', () => {
+    const { t, u } = currentPieces(); if (!u) return;
+    navigator.share({ title: t || u, url: u }).catch(() => {});
   });
-  // Tekst → ny note
-  $('un-text').addEventListener('click', function(){
-    const txt = sText.value.trim();
-    const first = txt.split('\n')[0].replace(/\s+/g,' ').trim();
-    const title = first.length > 60 ? first.slice(0, 57) + '…' : first;
-    this.href = upnoteUrl(title, textToMd(txt));
+  $('share-text').addEventListener('click', () => {
+    const txt = sText.value.trim(); if (!txt) return;
+    navigator.share({ text: txt }).catch(() => {});
   });
   $('copy-text').addEventListener('click', async function(){
     const ok = await copyText(sText.value);
@@ -654,11 +705,11 @@
   // ---------- Hent teksten (opskrift eller artikel) ----------
   const reader = { doc:null, url:'', recipe:null, article:null, current:null };
 
-  $('un-fetch').addEventListener('click', async function(){
+  $('scrape').addEventListener('click', async function(){
     const u = sUrl.value.trim();
     if (!u){ say('Intet link at hente', false); return; }
     const btn = this;
-    btn.disabled = true; btn.textContent = '⏳ Henter …';
+    btn.disabled = true; btn.innerHTML = '<i>⏳</i>Henter …';
     try{
       const r = await fetch(TITLE_WORKER + '?raw=1&url=' + encodeURIComponent(u));
       const body = await r.text();
@@ -673,7 +724,7 @@
     }catch(e){
       say('✗ ' + (e.message === 'Failed to fetch' ? 'Ingen forbindelse til workeren' : e.message), false);
     }
-    btn.disabled = false; btn.textContent = '📝 Hent teksten til UpNote';
+    btn.disabled = false; btn.innerHTML = '<i>📄</i>Hent tekst';
   });
 
   function blocksHTML(r, withTitle){
@@ -690,21 +741,6 @@
     });
     return h;
   }
-  function blocksMd(r){
-    const out = [];
-    if (r.img) out.push('![](' + r.img + ')');
-    out.push('[' + mdEsc(r.url) + '](' + r.url + ')');
-    if (r.meta.length) out.push(mdEsc(r.meta.join(' · ')));
-    r.blocks.forEach(b => {
-      if (b.type === 'h2') out.push('## ' + mdEsc(b.text));
-      else if (b.type === 'h3') out.push('### ' + mdEsc(b.text));
-      else if (b.type === 'p') out.push(mdEsc(b.text));
-      else if (b.type === 'quote') out.push('> ' + mdEsc(b.text));
-      else if (b.type === 'img') out.push('![](' + b.src + ')');
-      else out.push(b.items.map((i, n) => (b.type === 'ol' ? (n + 1) + '. ' : '- ') + mdEsc(i)).join('\n'));
-    });
-    return out.join('\n\n');
-  }
   function blocksText(r){
     const out = [r.title, r.url];
     if (r.meta.length) out.push(r.meta.join(' · '));
@@ -718,17 +754,21 @@
   }
   function showReader(r){
     reader.current = r;
+    $('main-view').hidden = true;
     $('reader').hidden = false;
+    shareEl.classList.add('full');
     $('r-kind').textContent = r.kind === 'recipe' ? '🍲 Opskrift' : '📄 Tekst';
-    $('r-open').href = upnoteUrl(r.title, blocksMd(r));
     $('r-article').innerHTML = blocksHTML(r, true);
     const t = $('r-toggle');
     if (r.kind === 'recipe'){ t.textContent = 'Vis hele teksten'; t.hidden = false; }
     else if (reader.recipe){ t.textContent = 'Vis kun opskriften'; t.hidden = false; }
     else t.hidden = true;
     $('r-share').hidden = !navigator.share;
-    $('reader').scrollIntoView({ behavior:'smooth', block:'start' });
+    $('sheet-body').scrollTop = 0;
   }
+  $('r-back').addEventListener('click', () => {
+    $('reader').hidden = true; $('main-view').hidden = false; shareEl.classList.remove('full');
+  });
   $('r-toggle').addEventListener('click', async () => {
     if (reader.current && reader.current.kind === 'recipe'){
       if (!reader.article) reader.article = await getArticle(reader.doc, reader.url);
@@ -748,6 +788,7 @@
   // ---------- Send til Mac ----------
   $('to-mac').addEventListener('click', async function(){
     const btn = this;
+    if (!MAC_TOPIC){ say('Mangler Snilds emne (MAC_TOPIC i config.js)', false); return; }
     try{
       let ok = true;
       if (mode === 'link'){
@@ -814,51 +855,6 @@
       await copyText(prompt);
       say('Prompt kopieret — indsæt i Gemini', true);
     }
-  });
-
-  // ==================== SEND TIL TELEFON (på computeren) ====================
-  const tp = { files: [] };
-  if (!isAndroid && !hasShare) $('tophone').hidden = false;
-
-  function tpUpdateLabel(){
-    $('tp-drop-label').textContent = tp.files.length
-      ? '📎 ' + tp.files.map(f => f.name).join(', ')
-      : 'Træk billeder/filer hertil, eller klik for at vælge';
-  }
-  function tpAdd(list){ for (const f of list) tp.files.push(f); tpUpdateLabel(); }
-  $('tp-files').addEventListener('change', (e) => { tpAdd(e.target.files); e.target.value = ''; });
-  const drop = $('tp-drop');
-  drop.addEventListener('dragover', (e) => { e.preventDefault(); drop.classList.add('over'); });
-  drop.addEventListener('dragleave', () => drop.classList.remove('over'));
-  drop.addEventListener('drop', (e) => { e.preventDefault(); drop.classList.remove('over'); tpAdd(e.dataTransfer.files); });
-  $('tp-text').addEventListener('paste', (e) => {
-    const files = [...(e.clipboardData && e.clipboardData.files || [])];
-    if (files.length){
-      e.preventDefault();
-      tpAdd(files.map((f, i) => f.name && f.name !== 'image.png' ? f
-        : new File([f], 'billede-' + new Date().toISOString().slice(0,19).replace(/[:T]/g,'-') + (i ? '-' + i : '') + '.png', { type: f.type })));
-    }
-  });
-  $('tp-clear').addEventListener('click', () => { tp.files = []; $('tp-text').value = ''; tpUpdateLabel(); });
-  $('tp-send').addEventListener('click', async function(){
-    const st = $('tp-status'), btn = this;
-    const txt = $('tp-text').value.trim();
-    if (!txt && !tp.files.length){ say('Skriv noget eller vælg en fil', false, st); return; }
-    btn.disabled = true;
-    let ok = true;
-    try{
-      for (let i = 0; i < tp.files.length; i++){
-        say('Sender ' + (i + 1) + ' af ' + tp.files.length + ' …', true, st);
-        ok = (await ntfySend(PHONE_TOPIC, tp.files[i], { filename: tp.files[i].name })) && ok;
-      }
-      if (txt){
-        const isLink = /^https?:\/\/\S+$/i.test(txt);
-        ok = (await ntfySend(PHONE_TOPIC, txt, isLink ? { click: txt, tags:'link' } : { tags:'tekst' })) && ok;
-      }
-      say(ok ? 'Sendt til telefonen ✓' : 'Noget kunne ikke sendes (grænsen er 15 MB pr. fil)', ok, st);
-      if (ok){ flash(btn); tp.files = []; $('tp-text').value = ''; tpUpdateLabel(); }
-    }catch(e){ say('Kunne ikke sende (ingen forbindelse?)', false, st); }
-    btn.disabled = false;
   });
 
   // ==================== SØGNING (uændret) ====================
