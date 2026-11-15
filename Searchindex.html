@@ -26,23 +26,49 @@
     -webkit-tap-highlight-color:transparent;
   }
   .wrap{max-width:540px;margin:0 auto}
+  [hidden]{display:none !important}
 
-  /* Shared-link panel (only when a link was shared to the page) */
-  #share{background:#f7f7f9;border-radius:16px;padding:14px 14px 13px;margin-bottom:20px}
-  #share h2{font-size:12px;font-weight:600;color:var(--muted);margin:0 0 10px}
+  /* Delt-panel og Send-til-telefon-panel */
+  .panel{background:#f7f7f9;border-radius:16px;padding:14px 14px 13px;margin-bottom:20px}
+  .panel h2{font-size:12px;font-weight:600;color:var(--muted);margin:0 0 10px}
+  .sub{font-size:11px;font-weight:600;color:var(--muted);margin:14px 0 6px;text-transform:uppercase;letter-spacing:.04em}
   .field{margin-bottom:9px}
   .field label{display:block;font-size:11px;color:var(--muted);margin:0 0 4px}
-  .field input{width:100%;border:1px solid var(--line);background:#fff;border-radius:10px;padding:9px 10px;font-size:13px;color:var(--ink);font-family:inherit;outline:0}
-  .field input:focus{border-color:var(--accent)}
-  .copybtns{display:flex;flex-wrap:wrap;gap:7px;margin-top:3px}
-  .cbtn{font-family:inherit;font-size:12.5px;font-weight:500;border:0;border-radius:9px;padding:8px 11px;background:#e9e9ee;color:var(--ink);cursor:pointer;transition:background .18s ease,color .18s ease}
-  .gembtn{display:inline-block;margin-top:10px;font-family:inherit;font-size:12.5px;font-weight:600;border:0;border-radius:9px;padding:9px 12px;background:#e9e9ee;color:var(--ink);cursor:pointer;transition:background .18s ease,color .18s ease}
-  .macbtn{display:inline-block;margin:10px 0 0 8px;font-family:inherit;font-size:12.5px;font-weight:600;border:0;border-radius:9px;padding:9px 12px;background:#e9e9ee;color:var(--ink);cursor:pointer;transition:background .18s ease,color .18s ease}
-  .geminibtn{display:inline-flex;align-items:center;gap:7px;margin-top:12px;font-family:inherit;font-size:12.5px;font-weight:600;border:0;border-radius:9px;padding:9px 12px;background:#e9e9ee;color:var(--ink);cursor:pointer;transition:background .18s ease,color .18s ease}
-  .geminibtn .gicon{width:16px;height:16px;object-fit:contain;display:block}
-  .cbtn:active,.gembtn:active,.macbtn:active,.geminibtn:active{transform:scale(.96)}
-  .cbtn.flash,.gembtn.flash,.macbtn.flash,.geminibtn.flash{background:#1a7f37;color:#fff}
-  #copied{font-size:12px;color:#1a7f37;margin:9px 2px 0;min-height:15px}
+  .field input,.field textarea{width:100%;border:1px solid var(--line);background:#fff;border-radius:10px;padding:9px 10px;font-size:13px;color:var(--ink);font-family:inherit;outline:0}
+  .field textarea{resize:vertical;min-height:84px;line-height:1.45}
+  .field input:focus,.field textarea:focus{border-color:var(--accent)}
+  .btnrow{display:flex;flex-wrap:wrap;gap:7px}
+  .cbtn{display:inline-flex;align-items:center;gap:6px;font-family:inherit;font-size:12.5px;font-weight:500;border:0;border-radius:9px;padding:8px 11px;background:#e9e9ee;color:var(--ink);cursor:pointer;text-decoration:none;transition:background .18s ease,color .18s ease}
+  .cbtn.strong{font-weight:600}
+  .cbtn.dark{background:var(--ink);color:#fff}
+  .cbtn .gicon{width:16px;height:16px;object-fit:contain;display:block}
+  .cbtn:active{transform:scale(.96)}
+  .cbtn.flash{background:#1a7f37;color:#fff}
+  .cbtn[disabled]{opacity:.5}
+  #copied,#tp-status{font-size:12px;margin:9px 2px 0;min-height:15px}
+
+  /* Delte filer */
+  .thumbs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+  .thumb{width:88px;height:88px;border-radius:10px;background:#e9e9ee;overflow:hidden;display:grid;place-items:center;font-size:11px;color:var(--muted);text-align:center;padding:4px;word-break:break-all}
+  .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+
+  /* Hentet tekst (læsevisning) */
+  #reader{margin-top:14px;border-top:1px solid var(--line);padding-top:12px}
+  .kind{display:inline-block;font-size:11.5px;font-weight:600;border:1px solid var(--ink);border-radius:999px;padding:1px 9px;margin-bottom:8px}
+  #reader article{background:#fff;border-radius:12px;padding:12px 14px;margin-top:10px;font-size:15px;line-height:1.55;max-height:60vh;overflow:auto}
+  #reader article h1{font-size:19px;line-height:1.25;margin:2px 0 10px}
+  #reader article h2{font-size:16px;margin:18px 0 6px}
+  #reader article h3{font-size:14.5px;margin:14px 0 4px}
+  #reader article img{max-width:100%;height:auto;border-radius:8px;display:block;margin:8px 0}
+  #reader article .src{font-size:12px;word-break:break-all}
+  #reader article .meta{color:var(--muted);font-size:13px}
+  #reader article blockquote{margin:8px 0;padding-left:12px;border-left:3px solid var(--ink)}
+  #reader article ul,#reader article ol{padding-left:20px}
+  #reader article li{margin-bottom:4px}
+
+  /* Send til telefon (på Mac) */
+  .drop{border:1.5px dashed #c8c8ce;border-radius:10px;padding:10px;font-size:12.5px;color:var(--muted);text-align:center;margin-bottom:9px;cursor:pointer}
+  .drop.over{border-color:var(--accent);color:var(--accent)}
 
   /* Search bar */
   .bar{display:flex;align-items:center;gap:9px;background:var(--field);border-radius:14px;padding:12px 14px;margin-bottom:26px}
@@ -51,7 +77,7 @@
   #q::placeholder{color:#a2a2a8}
   .clear{flex:0 0 auto;border:0;background:transparent;color:var(--muted);font-size:15px;cursor:pointer;padding:2px 4px;line-height:1}
 
-  /* Grouped icon grids, stacked with breathing room between groups */
+  /* Grouped icon grids */
   .group + .group{margin-top:30px}
   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(78px,1fr));gap:22px 12px}
   .tile{display:flex;flex-direction:column;align-items:center;gap:8px;background:transparent;border:0;cursor:pointer;padding:0;font-family:inherit}
@@ -68,25 +94,85 @@
 </head>
 <body>
   <main class="wrap">
-    <section id="share" hidden>
-      <h2>Delt link</h2>
-      <div class="field">
+
+    <!-- ============ DELT (vises når noget er delt til appen) ============ -->
+    <section id="share" class="panel" hidden>
+      <h2 id="share-h">Delt link</h2>
+
+      <div class="thumbs" id="thumbs" hidden></div>
+
+      <div class="field" id="f-title">
         <label for="s-title">Titel</label>
         <input id="s-title" type="text" autocomplete="off" spellcheck="false" placeholder="skriv en titel">
       </div>
-      <div class="field">
+      <div class="field" id="f-url">
         <label for="s-url">URL</label>
         <input id="s-url" type="text" autocomplete="off" spellcheck="false">
       </div>
-      <div class="copybtns">
-        <button class="cbtn" data-copy="both" type="button">Titel + URL</button>
-        <button class="cbtn" data-copy="md" type="button">Markdown</button>
-        <button class="cbtn" data-copy="html" type="button">HTML</button>
+      <div class="field" id="f-text" hidden>
+        <label for="s-text">Tekst</label>
+        <textarea id="s-text" rows="5" spellcheck="false"></textarea>
       </div>
-      <button class="gembtn" id="gemini-note" type="button">Tilføj til Noter &amp; Links</button>
-      <button class="macbtn" id="open-mac" type="button">Åbn URL på Mac</button>
+
+      <!-- Link -->
+      <div id="g-link">
+        <div class="btnrow">
+          <button class="cbtn" data-copy="both" type="button">Titel + URL</button>
+          <button class="cbtn" data-copy="md" type="button">Markdown</button>
+          <button class="cbtn" data-copy="html" type="button">HTML</button>
+        </div>
+        <p class="sub">UpNote</p>
+        <div class="btnrow">
+          <button class="cbtn strong dark" id="un-fetch" type="button">📝 Hent teksten til UpNote</button>
+          <a class="cbtn" id="un-link" href="#">🔗 Kun linket</a>
+        </div>
+      </div>
+
+      <!-- Tekst -->
+      <div id="g-text" hidden>
+        <div class="btnrow">
+          <a class="cbtn strong dark" id="un-text" href="#">📝 Ny note i UpNote</a>
+          <button class="cbtn" id="copy-text" type="button">📋 Kopiér</button>
+        </div>
+      </div>
+
+      <p class="sub">Send og gem</p>
+      <div class="btnrow">
+        <button class="cbtn strong" id="to-mac" type="button">💻 Send til Mac</button>
+        <button class="cbtn" id="share-on" type="button">↗ Del videre</button>
+        <button class="cbtn" id="gemini-note" type="button">Tilføj til Noter &amp; Links</button>
+        <button class="cbtn" id="gemini-share" type="button"><img class="gicon" src="https://www.google.com/s2/favicons?domain=gemini.google.com&amp;sz=128" alt="">Tilføj til noten &quot;Klip&quot;</button>
+      </div>
       <p id="copied" role="status" aria-live="polite"></p>
-      <button class="geminibtn" id="gemini-share" type="button"><img class="gicon" src="https://www.google.com/s2/favicons?domain=gemini.google.com&amp;sz=128" alt="">Tilføj til noten &quot;Klip&quot;</button>
+
+      <!-- Hentet tekst -->
+      <div id="reader" hidden>
+        <span class="kind" id="r-kind"></span>
+        <div class="btnrow">
+          <a class="cbtn strong dark" id="r-open" href="#">📝 Åbn i UpNote</a>
+          <button class="cbtn" id="r-share" type="button">↗ Del</button>
+          <button class="cbtn" id="r-copy" type="button">📋 Kopiér</button>
+          <button class="cbtn" id="r-toggle" type="button" hidden></button>
+        </div>
+        <article id="r-article"></article>
+      </div>
+    </section>
+
+    <!-- ============ SEND TIL TELEFON (kun på computer) ============ -->
+    <section id="tophone" class="panel" hidden>
+      <h2>📱 Send til telefon</h2>
+      <div class="field">
+        <textarea id="tp-text" rows="3" placeholder="Skriv eller indsæt et link eller en tekst … (eller sæt et billede ind med ⌘V)"></textarea>
+      </div>
+      <label class="drop" id="tp-drop">
+        <input id="tp-files" type="file" multiple hidden>
+        <span id="tp-drop-label">Træk billeder/filer hertil, eller klik for at vælge</span>
+      </label>
+      <div class="btnrow">
+        <button class="cbtn strong dark" id="tp-send" type="button">📱 Send</button>
+        <button class="cbtn" id="tp-clear" type="button">Ryd</button>
+      </div>
+      <p id="tp-status" role="status" aria-live="polite"></p>
     </section>
 
     <div class="bar">
@@ -102,6 +188,7 @@
 
 <script src="config.js"></script>
 <script>
+  // ==================== INDSTILLINGER ====================
   // Grupper (øverst → nederst): søgning/opslag · streaming · socialt · AI
   const GROUPS = [
     [
@@ -137,20 +224,278 @@
     ],
   ];
 
+  // Titel-/side-Worker (bagt ind; config.js kan overskrive)
+  const TITLE_WORKER  = (window.TITLE_WORKER || "https://henttitel.philipmad70.workers.dev/").trim();
+  // Noter & Links (Apps Script) – sættes i config.js, så den ikke forsvinder ved ny upload
+  const KLIP_ENDPOINT = (window.KLIP_ENDPOINT || "").trim();
+  const KLIP_TOKEN    = "klip-jj283uw8i64sj1wxur3z";
+  // ntfy-emner. Virker som adgangskoder – brug præcis de samme på Mac og i ntfy-appen.
+  const MAC_TOPIC   = "soeg-mac-4b7kq9zt";      // telefon → Mac
+  const PHONE_TOPIC = "soeg-tlf-r5akei4c4j";    // Mac → telefon
+  // =======================================================
+
+  /* ==== Udtræk: opskrift eller artikel fra et HTML-dokument ==== */
+  var READABILITY_URL='https://cdn.jsdelivr.net/npm/@mozilla/readability@0.5.0/Readability.js';
+
+  function clean(s){
+    var t=document.createElement('textarea');
+    t.innerHTML=String(s==null?'':s).replace(/<[^>]+>/g,' ');
+    return t.value.replace(/\s+/g,' ').trim();
+  }
+  function abs(u,base){try{return new URL(u,base).href;}catch(e){return '';}}
+  function metaContent(doc,prop){
+    var m=doc.querySelector('meta[property="'+prop+'"],meta[name="'+prop+'"]');
+    return m?clean(m.getAttribute('content')):'';
+  }
+
+  /* ---- Opskrift ---- */
+  function isRecipe(o){var t=o&&o['@type'];return t==='Recipe'||(Array.isArray(t)&&t.indexOf('Recipe')>-1);}
+  function findRecipe(o){
+    if(!o||typeof o!=='object')return null;
+    if(Array.isArray(o)){for(var i=0;i<o.length;i++){var r=findRecipe(o[i]);if(r)return r;}return null;}
+    if(isRecipe(o))return o;
+    if(o['@graph'])return findRecipe(o['@graph']);
+    if(o.mainEntity)return findRecipe(o.mainEntity);
+    return null;
+  }
+  function dur(d){
+    var m=String(d||'').match(/^P(?:(\d+)D)?(?:T(?:(\d+)H)?(?:(\d+)M)?)?/);
+    if(!m)return '';
+    var h=(+m[1]||0)*24+(+m[2]||0),mi=+m[3]||0,p=[];
+    if(h)p.push(h+' t');if(mi)p.push(mi+' min');
+    return p.join(' ');
+  }
+  function ldSteps(x,out){
+    if(!x)return;
+    if(typeof x==='string'){x.split(/\n+/).forEach(function(s){s=clean(s);if(s)out.push({t:s});});return;}
+    if(Array.isArray(x)){x.forEach(function(i){ldSteps(i,out);});return;}
+    if(x['@type']==='HowToSection'||x.itemListElement){
+      if(x.name)out.push({h:clean(x.name)});
+      ldSteps(x.itemListElement,out);return;
+    }
+    var t=clean(x.text||x.name);if(t)out.push({t:t});
+  }
+  function pickImg(im){
+    if(!im)return '';
+    if(typeof im==='string')return im;
+    if(Array.isArray(im)){
+      var best='',bw=-1;
+      im.forEach(function(i){
+        var u=typeof i==='string'?i:(i&&(i.url||i.contentUrl));var w=(i&&+i.width)||0;
+        if(u&&w>bw){best=u;bw=w;}
+      });
+      return best;
+    }
+    return im.url||im.contentUrl||'';
+  }
+  function hLevel(e){var m=/^H([1-6])$/.exec(e.tagName);return m?+m[1]:0;}
+  function grabSection(doc,re,allowP){
+    var hs=doc.querySelectorAll('h1,h2,h3,h4,h5,h6,p>strong:only-child,p>b:only-child'),head=null;
+    for(var i=0;i<hs.length;i++){if(re.test(clean(hs[i].textContent))){head=hs[i];break;}}
+    if(!head)return [];
+    var start=hLevel(head)?head:head.parentElement;
+    var L=hLevel(start)||6,out=[],n=start.nextElementSibling;
+    while(n){
+      var l=hLevel(n);
+      if(l&&l<=L)break;
+      if(l){out.push({h:clean(n.textContent).replace(/:\s*$/,'')});}
+      else if(/^(UL|OL)$/.test(n.tagName)){
+        n.querySelectorAll(':scope>li').forEach(function(li){var t=clean(li.textContent);if(t)out.push({t:t});});
+      }
+      else if(n.querySelector('h1,h2,h3,h4,h5,h6')){break;}
+      else if(n.querySelector('ul,ol')&&!n.querySelector('a[href*="amazon"],img')){
+        n.querySelectorAll('li').forEach(function(li){var t=clean(li.textContent);if(t)out.push({t:t});});
+      }
+      else if(allowP&&n.tagName==='P'){var t=clean(n.textContent);if(t)out.push({t:t});}
+      n=n.nextElementSibling;
+    }
+    while(out.length&&out[out.length-1].h)out.pop();
+    return out;
+  }
+  function findFact(doc,re){
+    var els=doc.querySelectorAll('li,p');
+    for(var i=0;i<els.length;i++){var t=clean(els[i].textContent),m=re.exec(t);if(m&&t.length<120)return clean(m[1]);}
+    return '';
+  }
+  function itemsToBlocks(items,ordered){
+    var out=[],list=null;
+    items.forEach(function(s){
+      if(s.h){list=null;out.push({type:'h3',text:s.h});}
+      else{if(!list){list={type:ordered?'ol':'ul',items:[]};out.push(list);}list.items.push(s.t);}
+    });
+    return out;
+  }
+  function getRecipe(doc,url){
+    var rec=null;
+    doc.querySelectorAll('script[type="application/ld+json"]').forEach(function(s){
+      if(rec)return;try{rec=findRecipe(JSON.parse(s.textContent));}catch(e){}
+    });
+    var name='',y='',time='',ing=[],st=[],img='';
+    if(rec){
+      name=clean(rec.name);
+      y=rec.recipeYield;if(Array.isArray(y))y=y[y.length-1];y=clean(y);
+      if(/^\d+$/.test(y))y+=' portioner';
+      time=dur(rec.totalTime)||dur(rec.cookTime);
+      ing=(rec.recipeIngredient||rec.ingredients||[]).map(clean).filter(Boolean).map(function(t){return {t:t};});
+      ldSteps(rec.recipeInstructions,st);
+      img=pickImg(rec.image);
+    }else{
+      ing=grabSection(doc,/^(ingredients?|ingredienser|ingredienslister?)\s*:?\s*(\(.*\))?$/i,false);
+      st=grabSection(doc,/^(instructions?|directions?|method|preparation|steps|how to make( it)?|fremgangsmåde|sådan gør du)\s*:?$/i,true);
+      if(ing.filter(function(x){return x.t;}).length<2)return null;
+      var h1=doc.querySelector('h1');name=h1?clean(h1.textContent):'';
+      time=findFact(doc,/^total time\s*:?\s*(.+)$/i);
+      y=findFact(doc,/^(?:servings|serves|yield|portioner)\s*:?\s*(\d.*)$/i);
+    }
+    if(!ing.length&&!st.length)return null;
+    var meta=[];if(y)meta.push('Portioner: '+y);if(time)meta.push('Tid: '+time);
+    var blocks=[];
+    if(ing.length){blocks.push({type:'h2',text:'Ingredienser'});blocks=blocks.concat(itemsToBlocks(ing,false));}
+    if(st.length){blocks.push({type:'h2',text:'Fremgangsmåde'});blocks=blocks.concat(itemsToBlocks(st,true));}
+    return {
+      kind:'recipe',
+      title:name||metaContent(doc,'og:title')||clean(doc.title),
+      img:abs(img||metaContent(doc,'og:image'),url),
+      url:url,meta:meta,blocks:blocks
+    };
+  }
+
+  /* ---- Artikel ---- */
+  function loadReadability(){
+    if(window.Readability)return Promise.resolve(true);
+    return new Promise(function(res){
+      var s=document.createElement('script');s.src=READABILITY_URL;
+      s.onload=function(){res(!!window.Readability);};s.onerror=function(){res(false);};
+      document.head.appendChild(s);
+    });
+  }
+  var BLOCKY='p,div,h1,h2,h3,h4,h5,h6,ul,ol,blockquote,figure,section,article,table,pre,img';
+  function walk(node,out,base,seen){
+    for(var i=0;i<node.children.length;i++){
+      var el=node.children[i],tag=el.tagName,t;
+      if(/^(SCRIPT|STYLE|NOSCRIPT|IFRAME|FORM|BUTTON|SVG|NAV|ASIDE|FOOTER|HEADER|SELECT|INPUT)$/.test(tag))continue;
+      if(/^H[1-6]$/.test(tag)){t=clean(el.textContent);if(t)out.push({type:tag<='H2'?'h2':'h3',text:t});}
+      else if(tag==='P'||tag==='PRE'){
+        t=clean(el.textContent);if(t)out.push({type:'p',text:t});
+        el.querySelectorAll('img').forEach(function(im){pushImg(im,out,base,seen);});
+      }
+      else if(tag==='UL'||tag==='OL'){
+        var items=[];
+        for(var j=0;j<el.children.length;j++){if(el.children[j].tagName==='LI'){t=clean(el.children[j].textContent);if(t)items.push(t);}}
+        if(items.length)out.push({type:tag.toLowerCase(),items:items});
+      }
+      else if(tag==='BLOCKQUOTE'){t=clean(el.textContent);if(t)out.push({type:'quote',text:t});}
+      else if(tag==='IMG'){pushImg(el,out,base,seen);}
+      else if(el.querySelector(BLOCKY)){walk(el,out,base,seen);}
+      else{t=clean(el.textContent);if(t)out.push({type:'p',text:t});}
+    }
+  }
+  function pushImg(im,out,base,seen){
+    var src=im.getAttribute('data-src')||im.getAttribute('data-lazy-src')||im.getAttribute('src')||'';
+    if(!src||/^data:/.test(src)||/\.svg(\?|$)/i.test(src))return;
+    var w=+im.getAttribute('width');if(w&&w<120)return;
+    src=abs(src,base);var key=imgKey(src);if(!src||seen[key])return;seen[key]=1;
+    out.push({type:'img',src:src});
+  }
+  /* Samme billede i flere størrelser (fx foto-780x470.jpg og foto-300x251.jpg) tæller som ét */
+  function imgKey(u){return String(u).split('?')[0].replace(/-\d+x\d+(?=\.\w+$)/,'');}
+  function fallbackRoot(doc){
+    var d=doc.cloneNode(true);
+    d.querySelectorAll('script,style,noscript,iframe,nav,aside,footer,header,form,[class*="share"],[class*="related"],[class*="comment"],[class*="newsletter"],[class*="ad-"],[id*="comment"]').forEach(function(e){e.remove();});
+    var c=d.querySelector('[itemprop="articleBody"],article,.entry-content,.post-content,.article-body,.article__body,main');
+    if(c)return c;
+    var best=d.body,score=0;
+    d.querySelectorAll('div,section').forEach(function(el){
+      var s=0;for(var i=0;i<el.children.length;i++){if(el.children[i].tagName==='P')s+=el.children[i].textContent.length;}
+      if(s>score){score=s;best=el;}
+    });
+    return best;
+  }
+  function getArticle(doc,url){
+    return loadReadability().then(function(ok){
+      var title=metaContent(doc,'og:title')||clean(doc.title),byline='',root=null;
+      if(ok){
+        try{
+          var a=new Readability(doc.cloneNode(true)).parse();
+          if(a&&a.content){
+            title=clean(a.title)||title;byline=clean(a.byline);
+            root=new DOMParser().parseFromString(a.content,'text/html').body;
+          }
+        }catch(e){}
+      }
+      if(!root)root=fallbackRoot(doc);
+      var blocks=[],seen={};
+      walk(root,blocks,url,seen);
+      /* Fjern gentagelse af titlen øverst */
+      if(blocks.length&&blocks[0].text&&blocks[0].text===title)blocks.shift();
+      var img=abs(metaContent(doc,'og:image'),url);
+      if(img&&seen[imgKey(img)])img='';
+      return {kind:'article',title:title,img:img,url:url,meta:byline?[byline]:[],blocks:blocks};
+    });
+  }
+
   const input = document.getElementById('q');
   const groupsEl = document.getElementById('groups');
   const clearBtn = document.getElementById('clear');
   const params = new URLSearchParams(location.search);
+  const $ = (id) => document.getElementById(id);
+  const isAndroid = /Android/i.test(navigator.userAgent);
 
-  // Din titel-Worker er bagt ind som standard, så den virker uden opsætning.
-  // (Har du en config.js med window.TITLE_WORKER, overskriver den denne.)
-  const TITLE_WORKER = (window.TITLE_WORKER || "https://henttitel.philipmad70.workers.dev/").trim();
+  // ---------- Fælles hjælpere ----------
+  const copied = $('copied');
+  let copiedTimer;
+  function say(msg, ok, el){
+    el = el || copied;
+    el.textContent = msg;
+    el.style.color = ok ? '#1a7f37' : '#b00020';
+    clearTimeout(el._t);
+    el._t = setTimeout(() => { el.textContent = ''; }, 3000);
+  }
+  function flash(btn){ btn.classList.add('flash'); setTimeout(() => btn.classList.remove('flash'), 2000); }
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function mdEsc(s){ return String(s).replace(/([\\*_`\[\]])/g,'\\$1'); }
+  async function copyText(text){
+    try{ await navigator.clipboard.writeText(text); return true; }
+    catch(e){
+      try{
+        const ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';
+        document.body.appendChild(ta);ta.select();const ok=document.execCommand('copy');document.body.removeChild(ta);return ok;
+      }catch(_){ return false; }
+    }
+  }
+  async function copyRich(html, text){
+    try{
+      if (window.ClipboardItem){
+        await navigator.clipboard.write([new ClipboardItem({
+          'text/html': new Blob([html], {type:'text/html'}),
+          'text/plain': new Blob([text], {type:'text/plain'})
+        })]);
+        return true;
+      }
+    }catch(e){}
+    return copyText(text);
+  }
+  // Send til ntfy (tekst eller fil). opts: title, tags, filename, click
+  async function ntfySend(topic, body, opts){
+    const q = new URLSearchParams();
+    opts = opts || {};
+    for (const k of ['title','tags','filename','click']) if (opts[k]) q.set(k, opts[k]);
+    const qs = q.toString();
+    const r = await fetch('https://ntfy.sh/' + topic + (qs ? '?' + qs : ''), { method:'POST', body });
+    return r.ok;
+  }
+  function upnoteUrl(title, markdown){
+    return 'upnote://x-callback-url/note/new?title=' + encodeURIComponent(title || '') +
+           '&text=' + encodeURIComponent(markdown || '') + '&markdown=true';
+  }
+  // Almindelig tekst → markdown, hvor linjeskift bevares
+  function textToMd(t){ return mdEsc(t).replace(/\r/g,'').replace(/\n/g, '  \n'); }
 
-  // ---- Shared link handling (Web Share Target) --------------------------
-  const shareEl = document.getElementById('share');
-  const sTitle  = document.getElementById('s-title');
-  const sUrl    = document.getElementById('s-url');
-  const copied  = document.getElementById('copied');
+  // ==================== DELT INDHOLD ====================
+  const shareEl = $('share');
+  const sTitle  = $('s-title');
+  const sUrl    = $('s-url');
+  const sText   = $('s-text');
 
   let titleLocked = false;
   sTitle.addEventListener('input', () => { titleLocked = true; });
@@ -158,7 +503,10 @@
   const rawTitle = params.get('title') || '';
   const rawText  = params.get('text')  || '';
   let   rawUrl   = params.get('url')   || '';
-  const hasShare = !!(rawTitle || rawText || rawUrl);
+  const nFiles   = parseInt(params.get('files') || '0', 10) || 0;
+  const hasShare = !!(rawTitle || rawText || rawUrl || nFiles);
+  let sharedFiles = [];   // File-objekter fra indbakken
+  let mode = 'link';      // 'link' | 'text' | 'files'
 
   function prettyFromUrl(u){
     try{
@@ -173,26 +521,43 @@
     }catch(e){ return ''; }
   }
 
+  function showMode(m){
+    mode = m;
+    $('share-h').textContent = m === 'files' ? (nFiles > 1 ? 'Delte filer' : 'Delt fil') : m === 'text' ? 'Delt tekst' : 'Delt link';
+    $('f-title').hidden = m !== 'link';
+    $('f-url').hidden   = m !== 'link';
+    $('f-text').hidden  = !(m === 'text' || (m === 'files' && sText.value));
+    $('g-link').hidden  = m !== 'link';
+    $('g-text').hidden  = m !== 'text';
+    $('thumbs').hidden  = m !== 'files';
+    $('gemini-note').hidden  = m !== 'link';
+    $('gemini-share').hidden = m !== 'link';
+    $('share-on').hidden = m === 'link' || !navigator.share;
+    shareEl.hidden = false;
+  }
+
   if (hasShare){
     if (!rawUrl){
       const m = rawText.match(/https?:\/\/[^\s]+/);
       if (m) rawUrl = m[0];
     }
-    const isUrlLike = (s) => /^\s*https?:\/\/\S+\s*$/i.test(s || '');
-    let title = rawTitle.trim();
-    if (isUrlLike(title)) title = '';
-    if (!title){
-      const leftover = rawText.replace(/https?:\/\/[^\s]+/g, '').trim();
-      if (leftover) title = leftover;
-    }
-    if (!title) title = prettyFromUrl(rawUrl);
+    const leftover = rawText.replace(/https?:\/\/[^\s]+/g, '').trim();
 
-    sTitle.value = title;
-    sUrl.value = rawUrl;
-    shareEl.hidden = false;
-    if (title) input.value = title;
-
-    if (rawUrl){
+    if (nFiles){
+      sText.value = [rawTitle, rawText].filter(Boolean).join('\n').trim();
+      showMode('files');
+      loadInbox();
+    } else if (rawUrl && leftover.length <= 200){
+      // ---- Link (som før) ----
+      const isUrlLike = (s) => /^\s*https?:\/\/\S+\s*$/i.test(s || '');
+      let title = rawTitle.trim();
+      if (isUrlLike(title)) title = '';
+      if (!title && leftover) title = leftover;
+      if (!title) title = prettyFromUrl(rawUrl);
+      sTitle.value = title;
+      sUrl.value = rawUrl;
+      showMode('link');
+      if (title) input.value = title;
       if (!sTitle.value) sTitle.placeholder = 'henter titel…';
       fetchTitleRemote(rawUrl).then(t => {
         sTitle.placeholder = 'skriv en titel';
@@ -202,7 +567,36 @@
           if (!input.value || input.value === prev) input.value = t;
         }
       });
+    } else {
+      // ---- Tekst ----
+      sText.value = (rawTitle && rawText && !rawText.startsWith(rawTitle) ? rawTitle + '\n\n' : '') + (rawText || rawTitle);
+      showMode('text');
+      input.value = sText.value.replace(/\s+/g,' ').trim().slice(0, 300);
     }
+  }
+  if (params.get('fejl')) say('Noget gik galt, da det delte blev modtaget', false);
+
+  async function loadInbox(){
+    const box = $('thumbs');
+    box.innerHTML = '';
+    try{
+      const cache = await caches.open('share-inbox');
+      const keys = await cache.keys();
+      keys.sort((a,b) => a.url.localeCompare(b.url, undefined, {numeric:true}));
+      for (const k of keys){
+        const r = await cache.match(k);
+        const blob = await r.blob();
+        const name = decodeURIComponent(r.headers.get('X-Name') || 'fil');
+        const file = new File([blob], name, { type: blob.type });
+        sharedFiles.push(file);
+        const t = document.createElement('div'); t.className = 'thumb';
+        if (/^image\//.test(file.type)){
+          const img = document.createElement('img'); img.alt = name; img.src = URL.createObjectURL(file); t.appendChild(img);
+        } else t.textContent = '📄 ' + name;
+        box.appendChild(t);
+      }
+      if (!sharedFiles.length) say('Filen kunne ikke findes – prøv at dele den igen', false);
+    }catch(e){ say('Kunne ikke læse de delte filer', false); }
   }
 
   async function fetchTitleRemote(url){
@@ -221,119 +615,256 @@
     return '';
   }
 
+  // ---------- Link: kopiér-knapper ----------
   function currentPieces(){ return { t: sTitle.value.trim(), u: sUrl.value.trim() }; }
-  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
   function buildCopy(kind){
     const { t, u } = currentPieces();
     const label = t || u;
     if (kind === 'md')    return t ? '[' + t + '](' + u + ')' : u;
     if (kind === 'html')  return '<a href="' + esc(u) + '">' + esc(label) + '</a>';
-    if (kind === 'url')   return u;
-    if (kind === 'title') return t;
     if (kind === 'both')  return (t ? t + '\n' : '') + u;
     return '';
   }
-  async function copyText(text){
-    try{ await navigator.clipboard.writeText(text); return true; }
-    catch(e){
-      try{
-        const ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';
-        document.body.appendChild(ta);ta.select();const ok=document.execCommand('copy');document.body.removeChild(ta);return ok;
-      }catch(_){ return false; }
-    }
-  }
-  let copiedTimer;
-  function flash(btn){ btn.classList.add('flash'); setTimeout(() => btn.classList.remove('flash'), 2000); }
-  document.querySelectorAll('.cbtn').forEach(btn => {
+  document.querySelectorAll('[data-copy]').forEach(btn => {
     btn.addEventListener('click', async () => {
       const ok = await copyText(buildCopy(btn.dataset.copy));
-      copied.textContent = ok ? 'Kopieret ✓' : 'Kunne ikke kopiere — markér og kopiér manuelt';
-      copied.style.color = ok ? '#1a7f37' : '#b00020';
+      say(ok ? 'Kopieret ✓' : 'Kunne ikke kopiere — markér og kopiér manuelt', ok);
       if (ok) flash(btn);
-      clearTimeout(copiedTimer);
-      copiedTimer = setTimeout(() => { copied.textContent = ''; }, 2400);
     });
   });
 
-  // "Tilføj til noten Klip": gemmer linket som et klikbart link i dit Google Doc
-  // "Klip" via et Apps Script — helt automatisk, intet åbnes.
-  const KLIP_ENDPOINT = "";                              // ← indsæt din Apps Script /exec-adresse her
-  const KLIP_TOKEN    = "klip-jj283uw8i64sj1wxur3z"; // ← samme hemmelige token som i scriptet
-  const gemBtn = document.getElementById('gemini-note');
-  if (gemBtn){
-    gemBtn.addEventListener('click', async () => {
-      const { t, u } = currentPieces();
-      if (!u && !t){ copied.textContent = 'Intet at tilføje'; copied.style.color = '#b00020'; return; }
-      if (!KLIP_ENDPOINT){
-        copied.textContent = 'Noter & Links er ikke sat op endnu (mangler Apps Script-adresse)';
-        copied.style.color = '#b00020';
-        clearTimeout(copiedTimer); copiedTimer = setTimeout(() => { copied.textContent=''; }, 3000);
-        return;
-      }
-      const endpoint = KLIP_ENDPOINT + '?token=' + encodeURIComponent(KLIP_TOKEN) +
-                       '&url=' + encodeURIComponent(u) + '&title=' + encodeURIComponent(t || '');
-      try {
-        await fetch(endpoint, { method: 'GET', mode: 'no-cors' });
-        copied.textContent = 'Tilføjet ✓';
-        copied.style.color = '#1a7f37';
-        flash(gemBtn);
-      } catch (e) {
-        copied.textContent = 'Kunne ikke tilføje (ingen forbindelse?)';
-        copied.style.color = '#b00020';
-      }
-      clearTimeout(copiedTimer);
-      copiedTimer = setTimeout(() => { copied.textContent = ''; }, 2600);
-    });
-  }
+  // ---------- UpNote ----------
+  // Kun linket: href sættes i klik-øjeblikket, så rettelser i felterne kommer med
+  $('un-link').addEventListener('click', function(){
+    const { t, u } = currentPieces();
+    this.href = upnoteUrl(t || u, '[' + mdEsc(u) + '](' + u + ')');
+  });
+  // Tekst → ny note
+  $('un-text').addEventListener('click', function(){
+    const txt = sText.value.trim();
+    const first = txt.split('\n')[0].replace(/\s+/g,' ').trim();
+    const title = first.length > 60 ? first.slice(0, 57) + '…' : first;
+    this.href = upnoteUrl(title, textToMd(txt));
+  });
+  $('copy-text').addEventListener('click', async function(){
+    const ok = await copyText(sText.value);
+    say(ok ? 'Kopieret ✓' : 'Kunne ikke kopiere', ok); if (ok) flash(this);
+  });
 
-  // "Åbn URL på Mac": send linket til en ntfy-topic, som Mac'en lytter på og åbner.
-  // Topic'et fungerer som en adgangskode — brug præcis det samme på Mac'en.
-  const MAC_TOPIC = "soeg-mac-4b7kq9zt";
-  const macBtn = document.getElementById('open-mac');
-  if (macBtn){
-    macBtn.addEventListener('click', async () => {
-      const { u } = currentPieces();
-      if (!u){ copied.textContent = 'Intet link at sende'; copied.style.color = '#b00020'; return; }
-      try {
-        const r = await fetch('https://ntfy.sh/' + MAC_TOPIC, { method: 'POST', body: u });
-        const ok = r.ok;
-        copied.textContent = ok ? 'Sendt til Mac ✓' : 'Kunne ikke sende';
-        copied.style.color = ok ? '#1a7f37' : '#b00020';
-        if (ok) flash(macBtn);
-      } catch (e) {
-        copied.textContent = 'Kunne ikke sende (ingen forbindelse?)';
-        copied.style.color = '#b00020';
-      }
-      clearTimeout(copiedTimer);
-      copiedTimer = setTimeout(() => { copied.textContent = ''; }, 2600);
-    });
-  }
+  // ---------- Hent teksten (opskrift eller artikel) ----------
+  const reader = { doc:null, url:'', recipe:null, article:null, current:null };
 
-  // "Tilføj til noten Klip" (Gemini): åbner del-arket med en færdig Keep-prompt.
-  const gemShareBtn = document.getElementById('gemini-share');
-  if (gemShareBtn){
-    gemShareBtn.addEventListener('click', async () => {
-      const { t, u } = currentPieces();
-      if (!u && !t){ copied.textContent = 'Intet at sende'; copied.style.color = '#b00020'; return; }
-      const content = u ? ((t ? t + ' — ' : '') + u) : t;
-      const prompt = 'Tilføj til Google Keep noten "Klip": ' + content;
-      flash(gemShareBtn);
-      if (navigator.share){
-        try { await navigator.share({ text: prompt }); }
-        catch (e) { /* bruger annullerede */ }
+  $('un-fetch').addEventListener('click', async function(){
+    const u = sUrl.value.trim();
+    if (!u){ say('Intet link at hente', false); return; }
+    const btn = this;
+    btn.disabled = true; btn.textContent = '⏳ Henter …';
+    try{
+      const r = await fetch(TITLE_WORKER + '?raw=1&url=' + encodeURIComponent(u));
+      const body = await r.text();
+      if (!r.ok) throw new Error(body.length < 200 ? body : 'Siden kunne ikke hentes');
+      reader.url = r.headers.get('X-Final-Url') || u;
+      const doc = new DOMParser().parseFromString(body, 'text/html');
+      const base = doc.createElement('base'); base.href = reader.url; doc.head.prepend(base);
+      reader.doc = doc; reader.article = null;
+      reader.recipe = getRecipe(doc, reader.url);
+      if (reader.recipe) showReader(reader.recipe);
+      else { reader.article = await getArticle(doc, reader.url); showReader(reader.article); }
+    }catch(e){
+      say('✗ ' + (e.message === 'Failed to fetch' ? 'Ingen forbindelse til workeren' : e.message), false);
+    }
+    btn.disabled = false; btn.textContent = '📝 Hent teksten til UpNote';
+  });
+
+  function blocksHTML(r, withTitle){
+    let h = withTitle ? '<h1>' + esc(r.title) + '</h1>' : '';
+    if (r.img) h += '<img src="' + esc(r.img) + '" alt="">';
+    h += '<p class="src"><a href="' + esc(r.url) + '">' + esc(r.url) + '</a></p>';
+    if (r.meta.length) h += '<p class="meta">' + esc(r.meta.join(' · ')) + '</p>';
+    r.blocks.forEach(b => {
+      if (b.type === 'h2' || b.type === 'h3') h += '<' + b.type + '>' + esc(b.text) + '</' + b.type + '>';
+      else if (b.type === 'p') h += '<p>' + esc(b.text) + '</p>';
+      else if (b.type === 'quote') h += '<blockquote>' + esc(b.text) + '</blockquote>';
+      else if (b.type === 'img') h += '<img src="' + esc(b.src) + '" alt="">';
+      else h += '<' + b.type + '>' + b.items.map(i => '<li>' + esc(i) + '</li>').join('') + '</' + b.type + '>';
+    });
+    return h;
+  }
+  function blocksMd(r){
+    const out = [];
+    if (r.img) out.push('![](' + r.img + ')');
+    out.push('[' + mdEsc(r.url) + '](' + r.url + ')');
+    if (r.meta.length) out.push(mdEsc(r.meta.join(' · ')));
+    r.blocks.forEach(b => {
+      if (b.type === 'h2') out.push('## ' + mdEsc(b.text));
+      else if (b.type === 'h3') out.push('### ' + mdEsc(b.text));
+      else if (b.type === 'p') out.push(mdEsc(b.text));
+      else if (b.type === 'quote') out.push('> ' + mdEsc(b.text));
+      else if (b.type === 'img') out.push('![](' + b.src + ')');
+      else out.push(b.items.map((i, n) => (b.type === 'ol' ? (n + 1) + '. ' : '- ') + mdEsc(i)).join('\n'));
+    });
+    return out.join('\n\n');
+  }
+  function blocksText(r){
+    const out = [r.title, r.url];
+    if (r.meta.length) out.push(r.meta.join(' · '));
+    r.blocks.forEach(b => {
+      if (b.type === 'h2') out.push(b.text.toUpperCase());
+      else if (b.type === 'h3' || b.type === 'p') out.push(b.text);
+      else if (b.type === 'quote') out.push('“' + b.text + '”');
+      else if (b.type === 'ul' || b.type === 'ol') out.push(b.items.map((i, n) => (b.type === 'ol' ? (n + 1) + '. ' : '• ') + i).join('\n'));
+    });
+    return out.join('\n\n');
+  }
+  function showReader(r){
+    reader.current = r;
+    $('reader').hidden = false;
+    $('r-kind').textContent = r.kind === 'recipe' ? '🍲 Opskrift' : '📄 Tekst';
+    $('r-open').href = upnoteUrl(r.title, blocksMd(r));
+    $('r-article').innerHTML = blocksHTML(r, true);
+    const t = $('r-toggle');
+    if (r.kind === 'recipe'){ t.textContent = 'Vis hele teksten'; t.hidden = false; }
+    else if (reader.recipe){ t.textContent = 'Vis kun opskriften'; t.hidden = false; }
+    else t.hidden = true;
+    $('r-share').hidden = !navigator.share;
+    $('reader').scrollIntoView({ behavior:'smooth', block:'start' });
+  }
+  $('r-toggle').addEventListener('click', async () => {
+    if (reader.current && reader.current.kind === 'recipe'){
+      if (!reader.article) reader.article = await getArticle(reader.doc, reader.url);
+      showReader(reader.article);
+    } else if (reader.recipe) showReader(reader.recipe);
+  });
+  $('r-share').addEventListener('click', () => {
+    const r = reader.current; if (!r) return;
+    navigator.share({ title: r.title, text: blocksText(r) }).catch(() => {});
+  });
+  $('r-copy').addEventListener('click', async function(){
+    const r = reader.current; if (!r) return;
+    const ok = await copyRich(blocksHTML(r, true), blocksText(r));
+    say(ok ? 'Kopieret ✓ – sæt ind i en note' : 'Kunne ikke kopiere', ok); if (ok) flash(this);
+  });
+
+  // ---------- Send til Mac ----------
+  $('to-mac').addEventListener('click', async function(){
+    const btn = this;
+    try{
+      let ok = true;
+      if (mode === 'link'){
+        const { t, u } = currentPieces();
+        if (!u){ say('Intet link at sende', false); return; }
+        ok = await ntfySend(MAC_TOPIC, u, { tags:'link', title: t });
+      } else if (mode === 'text'){
+        const txt = sText.value.trim();
+        if (!txt){ say('Ingen tekst at sende', false); return; }
+        ok = await ntfySend(MAC_TOPIC, txt, { tags:'tekst' });
       } else {
-        await copyText(prompt);
-        copied.textContent = 'Prompt kopieret — indsæt i Gemini';
-        copied.style.color = '#1a7f37';
-        clearTimeout(copiedTimer); copiedTimer = setTimeout(() => { copied.textContent=''; }, 2600);
+        if (!sharedFiles.length){ say('Ingen filer at sende', false); return; }
+        btn.disabled = true;
+        for (let i = 0; i < sharedFiles.length; i++){
+          say('Sender ' + (i + 1) + ' af ' + sharedFiles.length + ' …', true);
+          ok = (await ntfySend(MAC_TOPIC, sharedFiles[i], { tags:'fil', filename: sharedFiles[i].name })) && ok;
+        }
+        const extra = sText.value.trim();
+        if (extra) ok = (await ntfySend(MAC_TOPIC, extra, { tags:'tekst' })) && ok;
+        btn.disabled = false;
       }
-    });
+      say(ok ? 'Sendt til Mac ✓' : 'Kunne ikke sende (er filen for stor? Grænsen er 15 MB)', ok);
+      if (ok) flash(btn);
+    }catch(e){
+      btn.disabled = false;
+      say('Kunne ikke sende (ingen forbindelse?)', false);
+    }
+  });
+
+  // ---------- Del videre (tekst/filer) ----------
+  $('share-on').addEventListener('click', async () => {
+    const data = {};
+    if (mode === 'files' && sharedFiles.length){
+      if (navigator.canShare && !navigator.canShare({ files: sharedFiles })){ say('Filerne kan ikke deles videre herfra', false); return; }
+      data.files = sharedFiles;
+    }
+    if (sText.value.trim()) data.text = sText.value.trim();
+    try{ await navigator.share(data); }catch(e){}
+  });
+
+  // ---------- Noter & Links (Apps Script) ----------
+  $('gemini-note').addEventListener('click', async function(){
+    const { t, u } = currentPieces();
+    if (!u && !t){ say('Intet at tilføje', false); return; }
+    if (!KLIP_ENDPOINT){ say('Noter & Links er ikke sat op (mangler KLIP_ENDPOINT i config.js)', false); return; }
+    const endpoint = KLIP_ENDPOINT + '?token=' + encodeURIComponent(KLIP_TOKEN) +
+                     '&url=' + encodeURIComponent(u) + '&title=' + encodeURIComponent(t || '');
+    try{
+      await fetch(endpoint, { method:'GET', mode:'no-cors' });
+      say('Tilføjet ✓', true); flash(this);
+    }catch(e){ say('Kunne ikke tilføje (ingen forbindelse?)', false); }
+  });
+
+  // ---------- Klip via Gemini ----------
+  $('gemini-share').addEventListener('click', async function(){
+    const { t, u } = currentPieces();
+    if (!u && !t){ say('Intet at sende', false); return; }
+    const content = u ? ((t ? t + ' — ' : '') + u) : t;
+    const prompt = 'Tilføj til Google Keep noten "Klip": ' + content;
+    flash(this);
+    if (navigator.share){
+      try { await navigator.share({ text: prompt }); } catch (e) {}
+    } else {
+      await copyText(prompt);
+      say('Prompt kopieret — indsæt i Gemini', true);
+    }
+  });
+
+  // ==================== SEND TIL TELEFON (på computeren) ====================
+  const tp = { files: [] };
+  if (!isAndroid && !hasShare) $('tophone').hidden = false;
+
+  function tpUpdateLabel(){
+    $('tp-drop-label').textContent = tp.files.length
+      ? '📎 ' + tp.files.map(f => f.name).join(', ')
+      : 'Træk billeder/filer hertil, eller klik for at vælge';
   }
-  // ---- Søgefelt prefill (fra tekst-markerings-appen) --------------------
+  function tpAdd(list){ for (const f of list) tp.files.push(f); tpUpdateLabel(); }
+  $('tp-files').addEventListener('change', (e) => { tpAdd(e.target.files); e.target.value = ''; });
+  const drop = $('tp-drop');
+  drop.addEventListener('dragover', (e) => { e.preventDefault(); drop.classList.add('over'); });
+  drop.addEventListener('dragleave', () => drop.classList.remove('over'));
+  drop.addEventListener('drop', (e) => { e.preventDefault(); drop.classList.remove('over'); tpAdd(e.dataTransfer.files); });
+  $('tp-text').addEventListener('paste', (e) => {
+    const files = [...(e.clipboardData && e.clipboardData.files || [])];
+    if (files.length){
+      e.preventDefault();
+      tpAdd(files.map((f, i) => f.name && f.name !== 'image.png' ? f
+        : new File([f], 'billede-' + new Date().toISOString().slice(0,19).replace(/[:T]/g,'-') + (i ? '-' + i : '') + '.png', { type: f.type })));
+    }
+  });
+  $('tp-clear').addEventListener('click', () => { tp.files = []; $('tp-text').value = ''; tpUpdateLabel(); });
+  $('tp-send').addEventListener('click', async function(){
+    const st = $('tp-status'), btn = this;
+    const txt = $('tp-text').value.trim();
+    if (!txt && !tp.files.length){ say('Skriv noget eller vælg en fil', false, st); return; }
+    btn.disabled = true;
+    let ok = true;
+    try{
+      for (let i = 0; i < tp.files.length; i++){
+        say('Sender ' + (i + 1) + ' af ' + tp.files.length + ' …', true, st);
+        ok = (await ntfySend(PHONE_TOPIC, tp.files[i], { filename: tp.files[i].name })) && ok;
+      }
+      if (txt){
+        const isLink = /^https?:\/\/\S+$/i.test(txt);
+        ok = (await ntfySend(PHONE_TOPIC, txt, isLink ? { click: txt, tags:'link' } : { tags:'tekst' })) && ok;
+      }
+      say(ok ? 'Sendt til telefonen ✓' : 'Noget kunne ikke sendes (grænsen er 15 MB pr. fil)', ok, st);
+      if (ok){ flash(btn); tp.files = []; $('tp-text').value = ''; tpUpdateLabel(); }
+    }catch(e){ say('Kunne ikke sende (ingen forbindelse?)', false, st); }
+    btn.disabled = false;
+  });
+
+  // ==================== SØGNING (uændret) ====================
   const q = params.get('q');
   if (q !== null) input.value = q;
 
-  // ---- Build grouped icon grids -----------------------------------------
   for (const group of GROUPS){
     const g = document.createElement('div'); g.className='group';
     const grid = document.createElement('div'); grid.className='grid';
@@ -363,9 +894,7 @@
   }
 
   // Åbn i den eksterne browser (fuld Chrome) i stedet for en intern fane.
-  // Bruger et Android intent-link uden fast pakke, udløst som et rigtigt klik.
   function openExternally(url){
-    const isAndroid = /Android/i.test(navigator.userAgent);
     let href = url;
     if (isAndroid && /^https?:\/\//i.test(url)){
       const scheme = url.split('://')[0];
@@ -383,6 +912,9 @@
   clearBtn.addEventListener('click', () => { input.value=''; input.focus(); });
   input.addEventListener('keydown', e => { if (e.key === 'Enter') go(GROUPS[0][0].url); });
   input.addEventListener('focus', () => input.select());
+
+  // Ryd adressen, så en genindlæsning ikke viser det delte igen
+  if (hasShare) history.replaceState(null, '', location.pathname);
 
   if ('serviceWorker' in navigator){
     window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(()=>{}));
