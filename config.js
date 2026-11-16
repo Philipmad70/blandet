@@ -10,4 +10,4 @@ window.TITLE_WORKER = "";  // fx: "https://titel.dit-navn.workers.dev"
 window.KLIP_ENDPOINT = "https://script.google.com/macros/s/AKfycbw3Zxl2cKGFp3KqYyRkjP_VWIIRRBZQD-eQkEBZFC48dBt-E4Rxo0kBmiqPl1vBUPcD/exec";
 
 // Snilds emne til "Modtag fra telefonen" (Snild › Clipboard › Vejledning… › Kopiér)
-window.MAC_TOPIC = "";  // fx: "snild-til-mac-…"
+window.MAC_TOPIC = "snild-vt3r3iuqnxivy2kt8ft68u";  // fx: "snild-til-mac-…"

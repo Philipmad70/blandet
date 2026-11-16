@@ -57,6 +57,8 @@
   .act i,.qt i{width:54px;height:54px;border-radius:16px;background:var(--chip);display:grid;place-items:center;
     font-style:normal;font-size:21px;color:var(--ink);transition:background .15s ease,transform .08s ease}
   .act i img,.qt i img{width:26px;height:26px;object-fit:contain}
+  .act i svg.spin{animation:spin 1s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
   .act:active i,.qt:active i{transform:scale(.93);background:var(--chip-press)}
   .act.flash i{background:#1a7f37;color:#fff}
   .act[disabled]{opacity:.5}
@@ -153,17 +155,15 @@
 
         <h3 id="act-h">Gør noget med linket</h3>
         <div class="grid4" id="acts">
-          <button class="act" id="scrape"       data-for="link"  type="button"><i>📄</i>Hent tekst</button>
-          <button class="act" id="to-mac"       data-for="link text files" type="button"><i>💻</i>Til Mac</button>
-          <button class="act" data-copy="both"  data-for="link"  type="button"><i>📋</i>Kopiér</button>
-          <button class="act" id="copy-text"    data-for="text"  type="button"><i>📋</i>Kopiér</button>
-          <button class="act" id="share-link"   data-for="link"  type="button"><i>↗</i>Del</button>
-          <button class="act" id="share-text"   data-for="text"  type="button"><i>↗</i>Del</button>
-          <button class="act" id="share-on"     data-for="files" type="button"><i>↗</i>Del</button>
-          <button class="act" id="gemini-note"  data-for="link"  type="button"><i>🗒</i>Noter &amp; Links</button>
+          <button class="act" id="scrape"       data-for="link"  type="button"><i><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h6"/></svg></i>Hent tekst</button>
+          <button class="act" id="to-mac"       data-for="link text files" type="button"><i><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="11" rx="1.5"/><path d="M2 19h20"/></svg></i>Til Mac</button>
+          <button class="act" id="share-link"   data-for="link"  type="button"><i><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3"/><path d="M7 8l5-5 5 5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg></i>Del</button>
+          <button class="act" id="share-text"   data-for="text"  type="button"><i><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3"/><path d="M7 8l5-5 5 5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg></i>Del</button>
+          <button class="act" id="share-on"     data-for="files" type="button"><i><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3"/><path d="M7 8l5-5 5 5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg></i>Del</button>
+          <button class="act" id="gemini-note"  data-for="link"  type="button"><i><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h12v18l-6-4.5L6 21z"/></svg></i>Noter &amp; Links</button>
           <button class="act" id="gemini-share" data-for="link"  type="button"><i><img src="https://www.google.com/s2/favicons?domain=gemini.google.com&amp;sz=128" alt="" onerror="this.replaceWith('✦')"></i>Klip</button>
-          <button class="act" data-copy="md"    data-for="link"  type="button"><i>[ ]</i>Markdown</button>
-          <button class="act" data-copy="html"  data-for="link"  type="button"><i>&lt;/&gt;</i>HTML</button>
+          <button class="act" data-copy="md"    data-for="link"  type="button"><i><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="6" width="19" height="12" rx="2"/><path d="M6 15V9l2.5 3L11 9v6"/><path d="M16 9v6M14 13l2 2 2-2"/></svg></i>Markdown</button>
+          <button class="act" data-copy="html"  data-for="link"  type="button"><i><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5M13.5 5l-3 14"/></svg></i>HTML</button>
         </div>
         <p id="copied" role="status" aria-live="polite"></p>
 
@@ -235,6 +235,73 @@
   const KLIP_TOKEN    = "klip-jj283uw8i64sj1wxur3z";
   // ntfy-emnet, Snild lytter på ("Modtag fra telefonen"). Sættes i config.js.
   const MAC_TOPIC = (window.MAC_TOPIC || "").trim();
+
+  // ---------- Reddit ----------
+  // Reddit blokerer Cloudflare, men det offentlige Reddit-arkiv Arctic Shift svarer telefonen direkte.
+  // Workeren bruges kun til at slå delings-links (/s/…) op, så vi får trådens id.
+  const ARCTIC = 'https://arctic-shift.photon-reddit.com/api/';
+  function isRedditUrl(u){ return /^https?:\/\/([a-z0-9-]+\.)?(reddit\.com|redd\.it)\//i.test(u); }
+  function redditIdOf(u){ const m = u.match(/\/comments\/([a-z0-9]+)/i) || u.match(/redd\.it\/([a-z0-9]+)/i); return m ? m[1] : ''; }
+  const redditCache = {};
+  async function redditResolveId(u){
+    let id = redditIdOf(u);
+    if (!id && TITLE_WORKER){
+      try{
+        const r = await fetch(TITLE_WORKER + '?resolve=1&url=' + encodeURIComponent(u));
+        if (r.ok){ const j = await r.json(); id = j.id || redditIdOf(j.url || ''); }
+      }catch(e){}
+    }
+    return id;
+  }
+  async function redditThread(u){
+    if (redditCache[u]) return redditCache[u];
+    const id = await redditResolveId(u);
+    if (!id) return null;
+    try{
+      const r = await fetch(ARCTIC + 'posts/ids?ids=' + id);
+      if (!r.ok) return null;
+      const p = ((await r.json()).data || [])[0];
+      if (!p) return null;
+      let comments = [];
+      try{
+        const c = await fetch(ARCTIC + 'comments/tree?link_id=' + id + '&limit=60');
+        if (c.ok) comments = ((await c.json()).data || []).map(x => x.data || x)
+          .filter(x => x && x.body && x.body !== '[deleted]' && x.body !== '[removed]')
+          .sort((a, b) => (b.score || 0) - (a.score || 0)).slice(0, 15);
+      }catch(e){}
+      const out = {
+        title: p.title || '', sub: p.subreddit || '', author: p.author || '',
+        text: (p.selftext && !/^\[(removed|deleted)\]$/.test(p.selftext)) ? p.selftext : '',
+        link: p.is_self === false && p.url ? p.url : '',
+        url: 'https://www.reddit.com' + (p.permalink || ''), comments
+      };
+      redditCache[u] = out;
+      return out;
+    }catch(e){ return null; }
+  }
+  function mdToHTML(md){
+    return String(md).replace(/&amp;/g,'&').replace(/&gt;/g,'>').replace(/&lt;/g,'<')
+      .split(/\n{2,}/).map(par => {
+        let h = esc(par.trim()); if (!h) return '';
+        h = h.replace(/\[([^\]]+)\]\((https?:[^)\s]+)\)/g, '<a href="$2">$1</a>')
+             .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+        if (/^&gt;/.test(h)) return '<blockquote>' + h.replace(/^&gt;\s?/gm, '') + '</blockquote>';
+        if (/^#{1,6}\s/.test(h)) return '<h3>' + h.replace(/^#+\s*/, '') + '</h3>';
+        return '<p>' + h + '</p>';
+      }).join('\n');
+  }
+  function redditHTML(p){
+    let b = '<h1>' + esc(p.title) + '</h1><p><em>r/' + esc(p.sub) + (p.author ? ' · u/' + esc(p.author) : '') + '</em></p>';
+    if (p.link) b += '<p><a href="' + esc(p.link) + '">' + esc(p.link) + '</a></p>';
+    if (p.text) b += mdToHTML(p.text);
+    if (p.comments.length){
+      b += '<h2>Kommentarer</h2>';
+      p.comments.forEach(c => { b += '<p><strong>u/' + esc(c.author || '') + ' · ' + (c.score || 0) + ' point</strong></p>' + mdToHTML(c.body); });
+    }
+    return '<!doctype html><html lang="da"><head><meta charset="utf-8"><title>' + esc(p.title) +
+           '</title></head><body><article>' + b + '</article></body></html>';
+  }
+
   // =======================================================
 
   /* ==== Udtræk: opskrift eller artikel fra et HTML-dokument ==== */
@@ -658,6 +725,9 @@
   async function fetchTitleRemote(url){
     const withTimeout = (p, ms) =>
       Promise.race([p, new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), ms))]);
+    if (isRedditUrl(url)){
+      try{ const rp = await withTimeout(redditThread(url), 8000); if (rp && rp.title) return rp.title.trim(); }catch(e){}
+    }
     if (TITLE_WORKER){
       try{
         const r = await withTimeout(fetch(TITLE_WORKER + '?url=' + encodeURIComponent(url)), 6500);
@@ -697,24 +767,28 @@
     const txt = sText.value.trim(); if (!txt) return;
     navigator.share({ text: txt }).catch(() => {});
   });
-  $('copy-text').addEventListener('click', async function(){
-    const ok = await copyText(sText.value);
-    say(ok ? 'Kopieret ✓' : 'Kunne ikke kopiere', ok); if (ok) flash(this);
-  });
 
   // ---------- Hent teksten (opskrift eller artikel) ----------
   const reader = { doc:null, url:'', recipe:null, article:null, current:null };
+  const SCRAPE_HTML = $('scrape').innerHTML;
+  const ICON_WAIT = '<svg class="spin" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9"/></svg>';
 
   $('scrape').addEventListener('click', async function(){
     const u = sUrl.value.trim();
     if (!u){ say('Intet link at hente', false); return; }
     const btn = this;
-    btn.disabled = true; btn.innerHTML = '<i>⏳</i>Henter …';
+    btn.disabled = true; btn.innerHTML = '<i>' + ICON_WAIT + '</i>Henter …';
     try{
-      const r = await fetch(TITLE_WORKER + '?raw=1&url=' + encodeURIComponent(u));
-      const body = await r.text();
-      if (!r.ok) throw new Error(body.length < 200 ? body : 'Siden kunne ikke hentes');
-      reader.url = r.headers.get('X-Final-Url') || u;
+      let body = '', finalUrl = '';
+      const rp = isRedditUrl(u) ? await redditThread(u) : null;   // Reddit: hent fra arkivet
+      if (rp){ body = redditHTML(rp); finalUrl = rp.url; }
+      else {
+        const r = await fetch(TITLE_WORKER + '?raw=1&url=' + encodeURIComponent(u));
+        body = await r.text();
+        if (!r.ok) throw new Error(body.length < 200 ? body : 'Siden kunne ikke hentes');
+        finalUrl = r.headers.get('X-Final-Url') || u;
+      }
+      reader.url = finalUrl || u;
       const doc = new DOMParser().parseFromString(body, 'text/html');
       const base = doc.createElement('base'); base.href = reader.url; doc.head.prepend(base);
       reader.doc = doc; reader.article = null;
@@ -724,7 +798,7 @@
     }catch(e){
       say('✗ ' + (e.message === 'Failed to fetch' ? 'Ingen forbindelse til workeren' : e.message), false);
     }
-    btn.disabled = false; btn.innerHTML = '<i>📄</i>Hent tekst';
+    btn.disabled = false; btn.innerHTML = SCRAPE_HTML;
   });
 
   function blocksHTML(r, withTitle){
